@@ -1,0 +1,7 @@
+{
+  "name": "Donorfit — Fundraising Technology Built for Nonprofits",
+  "description": "Manage donations, sponsorships, memberships, and donor relationships in one connected platform built for NGOs and charities. Less administrative work. Stronger donor relationships. More impact.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

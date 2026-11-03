@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donorfit — Fundraising Technology Built for Nonprofits</title>
+    <meta name="description" content="Manage donations, sponsorships, memberships, and donor relationships in one connected platform built for NGOs and charities. Less administrative work. Stronger donor relationships. More impact." />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Donorfit — Fundraising Technology Built for Nonprofits" />
+    <meta property="og:description" content="Manage donations, sponsorships, memberships, and donor relationships in one connected platform built for NGOs and charities." />
+    <meta property="og:site_name" content="Donorfit" />
+    <meta property="og:image" content="/src/assets/images/hero_ngo_volunteers_1793444725627.jpg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Donorfit — Fundraising Technology Built for Nonprofits" />
+    <meta name="twitter:description" content="Manage donations, sponsorships, memberships, and donor relationships in one connected platform built for NGOs and charities." />
+    <meta name="twitter:image" content="/src/assets/images/hero_ngo_volunteers_1793444725627.jpg" />
+
+    <!-- Fonts: Plus Jakarta Sans for headings & display, DM Sans for high-legibility body prose -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://donorfit.com/#organization",
+          "name": "Donorfit",
+          "url": "https://donorfit.com",
+          "logo": "https://donorfit.com/donorfit-logo.svg",
+          "description": "Fundraising technology and donor management built specifically for NGOs, charities, and foundations.",
+          "slogan": "Less administrative work. Stronger donor relationships. More impact.",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Support",
+            "email": "contact@donorfit.com",
+            "areaServed": ["EU", "GB", "US", "CH", "Global"]
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://donorfit.com/#software",
+          "name": "Donorfit Platform",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web browser, cloud-hosted",
+          "description": "Connected fundraising platform providing donation management, recurring giving, child & orphan sponsorship, pooled funds, membership, and donor CRM for European and international charities.",
+          "offers": {
+            "@type": "Offer",
+            "price": "Contact for pricing",
+            "priceCurrency": "EUR"
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
+  <body class="bg-neutral-50 text-neutral-900 font-sans antialiased selection:bg-emerald-600 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

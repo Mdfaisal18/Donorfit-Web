@@ -1,0 +1,119 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React from 'react';
+import { ModalProvider, useModal } from './context/ModalContext.tsx';
+import Navbar from './components/Navbar.tsx';
+import Footer from './components/Footer.tsx';
+import BookDemoModal from './components/BookDemoModal.tsx';
+import GetStartedModal from './components/GetStartedModal.tsx';
+import CookieConsent from './components/CookieConsent.tsx';
+import SEOHead from './components/SEOHead.tsx';
+
+import HomePage from './pages/HomePage.tsx';
+import ProductPage from './pages/ProductPage.tsx';
+import SolutionPage from './pages/SolutionPage.tsx';
+import AboutPage from './pages/AboutPage.tsx';
+import ContactPage from './pages/ContactPage.tsx';
+import SecurityPage from './pages/SecurityPage.tsx';
+import BlogIndexPage from './pages/BlogIndexPage.tsx';
+import BlogPostPage from './pages/BlogPostPage.tsx';
+import GuidesPage from './pages/GuidesPage.tsx';
+import CaseStudiesPage from './pages/CaseStudiesPage.tsx';
+import FAQsPage from './pages/FAQsPage.tsx';
+import PartnersPage from './pages/PartnersPage.tsx';
+import LegalPage from './pages/LegalPage.tsx';
+import NotFoundPage from './pages/NotFoundPage.tsx';
+
+function AppContent() {
+  const { currentRoute } = useModal();
+
+  const renderCurrentPage = () => {
+    // 1. Homepage
+    if (currentRoute === '/' || currentRoute === '') {
+      return <HomePage />;
+    }
+
+    // 2. Product Landing Pages
+    if (currentRoute === '/sponsorship') return <ProductPage slug="sponsorship" />;
+    if (currentRoute === '/orphan-sponsorship') return <ProductPage slug="orphan-sponsorship" />;
+    if (currentRoute === '/money-pool') return <ProductPage slug="money-pool" />;
+    if (currentRoute === '/membership') return <ProductPage slug="membership" />;
+    if (currentRoute === '/donations') return <ProductPage slug="donations" />;
+    if (currentRoute === '/recurring-giving') return <ProductPage slug="recurring-giving" />;
+    if (currentRoute === '/donor-management') return <ProductPage slug="donor-management" />;
+    if (currentRoute === '/campaign-management') return <ProductPage slug="campaign-management" />;
+    if (currentRoute === '/reporting-and-insights') return <ProductPage slug="reporting-and-insights" />;
+
+    // 3. Solution Pages
+    if (currentRoute === '/solutions/ngos') return <SolutionPage slug="ngos" />;
+    if (currentRoute === '/solutions/charities') return <SolutionPage slug="charities" />;
+    if (currentRoute === '/solutions/foundations') return <SolutionPage slug="foundations" />;
+    if (currentRoute === '/solutions/sponsorship-organizations') return <SolutionPage slug="sponsorship-organizations" />;
+    if (currentRoute === '/solutions/membership-organizations') return <SolutionPage slug="membership-organizations" />;
+    if (currentRoute === '/solutions/international-organizations') return <SolutionPage slug="international-organizations" />;
+
+    // 4. Company & General Pages
+    if (currentRoute === '/about') return <AboutPage />;
+    if (currentRoute === '/contact') return <ContactPage />;
+    if (currentRoute === '/security') return <SecurityPage />;
+    if (currentRoute === '/partners') return <PartnersPage />;
+
+    // 5. Resources & Knowledge Base
+    if (currentRoute === '/blog') return <BlogIndexPage />;
+    if (currentRoute.startsWith('/blog/')) {
+      const slug = currentRoute.replace('/blog/', '');
+      return <BlogPostPage slug={slug} />;
+    }
+    if (currentRoute === '/guides') return <GuidesPage />;
+    if (currentRoute === '/case-studies') return <CaseStudiesPage />;
+    if (currentRoute === '/faqs') return <FAQsPage />;
+
+    // 6. Legal & Trust Pages
+    if (currentRoute === '/privacy-policy') return <LegalPage type="privacy" />;
+    if (currentRoute === '/cookie-policy') return <LegalPage type="cookies" />;
+    if (currentRoute === '/impressum') return <LegalPage type="impressum" />;
+    if (currentRoute === '/terms') return <LegalPage type="terms" />;
+    if (currentRoute === '/accessibility') return <LegalPage type="accessibility" />;
+
+    // 7. Fallback: 404
+    return <NotFoundPage />;
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col bg-neutral-50 text-neutral-900">
+      <SEOHead />
+      
+      {/* Skip to Content Link for WCAG 2.2 AA Accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-50 px-4 py-2 bg-emerald-600 text-white font-bold rounded-lg shadow-lg focus:outline-hidden"
+      >
+        Skip to main content
+      </a>
+
+      <Navbar />
+
+      <main id="main-content" className="flex-1 focus:outline-hidden">
+        {renderCurrentPage()}
+      </main>
+
+      <Footer />
+
+      {/* Interactive Modals & GDPR Banner */}
+      <BookDemoModal />
+      <GetStartedModal />
+      <CookieConsent />
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ModalProvider>
+      <AppContent />
+    </ModalProvider>
+  );
+}
