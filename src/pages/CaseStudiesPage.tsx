@@ -7,7 +7,7 @@ export default function CaseStudiesPage() {
   const { openBookDemo, openGetStarted } = useModal();
 
   return (
-    <div className="space-y-16 sm:space-y-24 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* Hero */}
       <section className="pt-12 sm:pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,13 +41,13 @@ export default function CaseStudiesPage() {
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-950 font-display mt-1">
                   {cs.organization}
                 </h2>
-                <span className="text-xs text-neutral-400 mt-0.5 block">{cs.location}</span>
+                <span className="text-xs text-neutral-500 mt-0.5 block">{cs.location}</span>
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 {cs.results.map((r, i) => (
                   <div key={i} className="p-3 rounded-xl bg-neutral-50 border border-neutral-200 text-center min-w-28">
-                    <div className="text-xl font-extrabold text-neutral-950 font-mono tabular-nums">{r.metric}</div>
-                    <div className="text-[11px] text-neutral-500 mt-0.5">{r.label}</div>
+                    <div className="text-xl font-extrabold text-neutral-950 tabular-nums tabular-nums">{r.metric}</div>
+                    <div className="text-xs text-neutral-500 mt-0.5">{r.label}</div>
                   </div>
                 ))}
               </div>

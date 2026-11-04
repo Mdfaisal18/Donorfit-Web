@@ -47,12 +47,13 @@ export default function HomePage() {
   const recoveredRevenue = Math.round(donorCount * 3.8);
 
   return (
-    <div className="space-y-24 sm:space-y-36 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* 1. HERO SECTION: BOLD, LAYERED & VISUALLY STUNNING */}
-      <section className="relative pt-10 sm:pt-16 lg:pt-20 overflow-hidden bg-subtle-grid">
+      <section className="relative isolate pt-10 sm:pt-16 lg:pt-20 overflow-hidden bg-subtle-grid">
+        <div aria-hidden="true" className="absolute inset-0 bg-hero-glow pointer-events-none -z-10"></div>
         {/* Ambient atmospheric gradients */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-emerald-400/15 via-teal-300/10 to-transparent blur-3xl pointer-events-none -z-10"></div>
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-emerald-400/15 via-teal-300/10 to-transparent blur-3xl pointer-events-none -z-10 animate-glow-slow"></div>
         <div className="absolute top-10 right-10 w-[350px] h-[350px] bg-emerald-500/10 blur-2xl pointer-events-none -z-10"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,7 +96,7 @@ export default function HomePage() {
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
               <button
                 onClick={() => openGetStarted()}
-                className="inline-flex items-center gap-2.5 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base rounded-xl shadow-lg shadow-emerald-700/25 hover:shadow-xl hover:shadow-emerald-700/35 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                className="btn-gradient inline-flex items-center gap-2.5 px-8 py-4 font-bold text-sm sm:text-base rounded-xl cursor-pointer"
               >
                 <span>Get Started</span>
                 <ArrowRight className="w-4 h-4" />
@@ -136,7 +137,7 @@ export default function HomePage() {
                     <span className="w-3 h-3 rounded-full bg-amber-500/80"></span>
                     <span className="w-3 h-3 rounded-full bg-emerald-500/80"></span>
                   </div>
-                  <span className="text-[11px] font-mono text-neutral-400 pl-3">donorfit.com/platform/mission-hub</span>
+                  <span className="text-[11px] tabular-nums text-neutral-400 pl-3">donorfit.com/platform/mission-hub</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[11px] text-emerald-400 font-medium">European Hub · Real-Time Sync</span>
@@ -159,19 +160,19 @@ export default function HomePage() {
                 <div className="absolute bottom-4 sm:bottom-6 inset-x-4 sm:inset-x-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                   <div className="p-4 rounded-xl bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 text-white shadow-xl">
                     <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider block">Predictable Giving</span>
-                    <div className="text-xl sm:text-2xl font-bold font-mono mt-1 text-emerald-400">€248,500 / mo</div>
+                    <div className="text-xl sm:text-2xl font-bold tabular-nums mt-1 text-emerald-400">€248,500 / mo</div>
                     <span className="text-[11px] text-neutral-300 mt-1 block">+18.4% recurring retention</span>
                   </div>
 
                   <div className="p-4 rounded-xl bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 text-white shadow-xl">
                     <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider block">Active Beneficiaries</span>
-                    <div className="text-xl sm:text-2xl font-bold font-mono mt-1 text-blue-400">3,842 Children</div>
+                    <div className="text-xl sm:text-2xl font-bold tabular-nums mt-1 text-blue-400">3,842 Children</div>
                     <span className="text-[11px] text-neutral-300 mt-1 block">Supported across 18 missions</span>
                   </div>
 
                   <div className="p-4 rounded-xl bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 text-white shadow-xl hidden sm:block">
                     <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider block">Admin Time Returned</span>
-                    <div className="text-xl sm:text-2xl font-bold font-mono mt-1 text-purple-400">65% Saved</div>
+                    <div className="text-xl sm:text-2xl font-bold tabular-nums mt-1 text-purple-400">65% Saved</div>
                     <span className="text-[11px] text-neutral-300 mt-1 block">Zero manual CSV reconciliation</span>
                   </div>
                 </div>
@@ -186,7 +187,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="text-center lg:text-left">
-              <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider block">Native European Ecosystem</span>
+              <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider block">Native European Ecosystem</span>
               <span className="text-sm font-bold text-neutral-900 font-display">Trusted Banking & Non-Profit Integrations</span>
             </div>
 
@@ -575,7 +576,7 @@ export default function HomePage() {
 
       {/* 5. INTERACTIVE NON-PROFIT SAVINGS CALCULATOR */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 sm:p-12 rounded-3xl bg-neutral-900 text-white border border-neutral-800 shadow-2xl relative overflow-hidden">
+        <div className="p-8 sm:p-12 rounded-3xl bg-neutral-900 bg-dark-glow text-white border border-neutral-800 shadow-2xl relative overflow-hidden">
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="relative z-10 space-y-8">
@@ -595,7 +596,7 @@ export default function HomePage() {
             <div className="space-y-4 p-6 rounded-2xl bg-neutral-800/90 border border-neutral-700">
               <div className="flex justify-between items-center text-sm">
                 <span className="font-semibold text-neutral-200">Active Donors & Members:</span>
-                <span className="text-2xl font-extrabold text-emerald-400 font-mono">{donorCount.toLocaleString()} Donors</span>
+                <span className="text-2xl font-extrabold text-emerald-400 tabular-nums">{donorCount.toLocaleString()} Donors</span>
               </div>
               <input
                 type="range"
@@ -606,7 +607,7 @@ export default function HomePage() {
                 onChange={(e) => setDonorCount(Number(e.target.value))}
                 className="w-full accent-emerald-500 cursor-pointer h-2 bg-neutral-700 rounded-lg"
               />
-              <div className="flex justify-between text-[11px] text-neutral-400 font-mono">
+              <div className="flex justify-between text-xs text-neutral-400 tabular-nums">
                 <span>200 Donors (Emerging NGO)</span>
                 <span>5,000 Donors (Established Charity)</span>
                 <span>10,000+ Donors (International Aid)</span>
@@ -617,7 +618,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-5 rounded-2xl bg-neutral-800/60 border border-neutral-700/80 space-y-1">
                 <span className="text-xs text-neutral-400 block">Estimated Admin Hours Saved Annually:</span>
-                <div className="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-400 tabular-nums">
+                <div className="text-3xl sm:text-4xl font-extrabold tabular-nums text-emerald-400 tabular-nums">
                   {adminHoursSaved * 12} Hours
                 </div>
                 <p className="text-xs text-neutral-300 pt-1">
@@ -627,7 +628,7 @@ export default function HomePage() {
 
               <div className="p-5 rounded-2xl bg-neutral-800/60 border border-neutral-700/80 space-y-1">
                 <span className="text-xs text-neutral-400 block">Estimated Involuntary Churn Recovered:</span>
-                <div className="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-400 tabular-nums">
+                <div className="text-3xl sm:text-4xl font-extrabold tabular-nums text-emerald-400 tabular-nums">
                   €{recoveredRevenue.toLocaleString()} / mo
                 </div>
                 <p className="text-xs text-neutral-300 pt-1">
@@ -742,12 +743,12 @@ export default function HomePage() {
 
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-xl bg-neutral-100 border border-neutral-200/80">
-                <div className="text-xl font-extrabold font-mono text-neutral-900">5.4x</div>
-                <div className="text-xs text-neutral-500 mt-0.5">Higher lifetime value from recurring champions</div>
+                <div className="text-xl font-extrabold tabular-nums text-neutral-900">5.4x</div>
+                <div className="text-xs text-neutral-600 mt-0.5">Higher lifetime value from recurring champions</div>
               </div>
               <div className="p-4 rounded-xl bg-neutral-100 border border-neutral-200/80">
-                <div className="text-xl font-extrabold font-mono text-neutral-900">0%</div>
-                <div className="text-xs text-neutral-500 mt-0.5">Disjointed records across spreadsheets</div>
+                <div className="text-xl font-extrabold tabular-nums text-neutral-900">0%</div>
+                <div className="text-xs text-neutral-600 mt-0.5">Disjointed records across spreadsheets</div>
               </div>
             </div>
 
@@ -786,7 +787,7 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {CASE_STUDIES.map((cs) => (
-            <div key={cs.id} className="p-8 rounded-3xl bg-white border border-neutral-200/90 shadow-sm flex flex-col justify-between space-y-6 hover:border-neutral-300 transition-all">
+            <div key={cs.id} className="p-8 rounded-3xl bg-white border border-neutral-200/90 shadow-sm flex flex-col justify-between space-y-6 hover-lift">
               <div className="space-y-3">
                 <div className="text-xs text-neutral-500 font-medium">
                   {cs.organization} · {cs.location}
@@ -803,15 +804,15 @@ export default function HomePage() {
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   {cs.results.slice(0, 2).map((r, i) => (
                     <div key={i} className="p-2.5 rounded-lg bg-neutral-50 border border-neutral-200/60">
-                      <div className="text-base font-extrabold text-neutral-950 font-mono tabular-nums">{r.metric}</div>
-                      <div className="text-[10px] text-neutral-500">{r.label}</div>
+                      <div className="text-base font-extrabold text-neutral-950 tabular-nums tabular-nums">{r.metric}</div>
+                      <div className="text-[11px] text-neutral-500">{r.label}</div>
                     </div>
                   ))}
                 </div>
                 {cs.quote && (
                   <blockquote className="text-xs italic text-neutral-700 border-l-2 border-emerald-500 pl-3 py-0.5">
                     &ldquo;{cs.quote.text}&rdquo;
-                    <span className="block not-italic text-[10px] text-neutral-400 mt-1">— {cs.quote.author}, {cs.quote.role}</span>
+                    <span className="block not-italic text-[11px] text-neutral-500 mt-1">— {cs.quote.author}, {cs.quote.role}</span>
                   </blockquote>
                 )}
               </div>
@@ -821,7 +822,7 @@ export default function HomePage() {
       </section>
 
       {/* 9. EUROPEAN DATA SOVEREIGNTY & SECURITY BANNER */}
-      <section className="bg-neutral-950 text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8 border border-neutral-800 shadow-2xl relative overflow-hidden bg-dark-grid">
+      <section className="bg-neutral-950 text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8 border border-neutral-800 shadow-2xl relative overflow-hidden bg-dark-glow-grid">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
           <div className="w-14 h-14 mx-auto rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20 shadow-inner">
             <Lock className="w-7 h-7" />
@@ -868,7 +869,7 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {BLOG_POSTS.slice(0, 3).map((post) => (
-            <article key={post.slug} className="p-8 rounded-3xl bg-white border border-neutral-200/90 shadow-xs flex flex-col justify-between space-y-4 group hover:border-neutral-300 transition-all">
+            <article key={post.slug} className="p-8 rounded-3xl bg-white border border-neutral-200/90 shadow-xs flex flex-col justify-between space-y-4 group hover-lift">
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-xs text-neutral-500">
                   <span className="font-semibold text-emerald-700">{post.category}</span>
@@ -884,7 +885,7 @@ export default function HomePage() {
               </div>
 
               <div className="pt-4 border-t border-neutral-100 flex items-center justify-between">
-                <span className="text-[11px] text-neutral-400">{post.publishedAt}</span>
+                <span className="text-xs text-neutral-500">{post.publishedAt}</span>
                 <button
                   onClick={() => navigateTo(`/blog/${post.slug}`)}
                   className="text-xs font-semibold text-neutral-900 group-hover:text-emerald-700 flex items-center gap-1 cursor-pointer"

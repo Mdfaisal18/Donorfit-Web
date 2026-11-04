@@ -1,23 +1,150 @@
 @import "tailwindcss";
 
+/* ==================================================================
+ * TYPOGRAPHY SYSTEM
+ * One family (Plus Jakarta Sans, variable 400–800) for every element.
+ * Small steps are slightly larger than Tailwind's defaults and all body
+ * steps get comfortable line-heights, so the ~400 existing text-xs /
+ * text-sm usages become readable without per-component edits.
+ * ================================================================== */
+@theme {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --text-xs: 0.8125rem;            /* 13px */
+  --text-xs--line-height: 1.6;
+  --text-sm: 0.9375rem;            /* 15px */
+  --text-sm--line-height: 1.65;
+  --text-base: 1rem;               /* 16px */
+  --text-base--line-height: 1.7;
+  --text-lg: 1.125rem;             /* 18px */
+  --text-lg--line-height: 1.7;
+  --text-xl: 1.25rem;              /* 20px */
+  --text-xl--line-height: 1.6;
+  --text-2xl--line-height: 1.35;
+  --text-3xl--line-height: 1.25;
+  --text-4xl--line-height: 1.15;
+
+  /* Slightly softer than the defaults: avoids overly heavy / compressed headlines. */
+  --font-weight-extrabold: 750;
+  --tracking-tight: -0.02em;
+}
+
+/* ==================================================================
+ * VISUAL ENHANCEMENTS — existing approved palette only
+ * Every gradient below is built from Tailwind's stock `emerald` and
+ * `neutral` scales (the site's original colours). No palette values are
+ * overridden. Dark-surface utilities add light on top of a section's
+ * existing background colour; they never replace it.
+ * ================================================================== */
+
+/* Soft emerald light on dark (neutral-900/950) surfaces. */
+@utility bg-dark-glow {
+  background-image:
+    radial-gradient(55% 70% at 0% 0%, color-mix(in oklab, var(--color-emerald-500) 14%, transparent), transparent 70%),
+    radial-gradient(45% 60% at 100% 100%, color-mix(in oklab, var(--color-emerald-400) 8%, transparent), transparent 70%),
+    linear-gradient(160deg, rgb(255 255 255 / 0.03), transparent 55%);
+}
+
+/* Same glow combined with the existing dark grid pattern. */
+@utility bg-dark-glow-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(55% 70% at 50% 0%, color-mix(in oklab, var(--color-emerald-500) 14%, transparent), transparent 70%),
+    radial-gradient(45% 60% at 100% 100%, color-mix(in oklab, var(--color-emerald-400) 8%, transparent), transparent 70%);
+  background-size: 36px 36px, 36px 36px, auto, auto;
+}
+
+/* Very faint emerald wash for light hero areas. */
+@utility bg-hero-glow {
+  background-image:
+    radial-gradient(42% 55% at 15% 8%, color-mix(in oklab, var(--color-emerald-400) 12%, transparent), transparent 70%),
+    radial-gradient(38% 50% at 88% 4%, color-mix(in oklab, var(--color-emerald-300) 10%, transparent), transparent 70%);
+}
+
+/* Primary button: emerald-600 → 700 → 800 gradient, deepens gently on hover. */
+@utility btn-gradient {
+  color: #fff;
+  /* Label sits over the emerald-700 band so white text meets WCAG AA (≥ 4.5:1). */
+  background-color: var(--color-emerald-700);
+  background-image: linear-gradient(135deg, var(--color-emerald-600) -15%, var(--color-emerald-700) 45%, var(--color-emerald-800) 115%);
+  background-size: 160% 100%;
+  background-position: 0% 50%;
+  box-shadow: 0 6px 16px -6px color-mix(in oklab, var(--color-emerald-700) 45%, transparent), inset 0 1px 0 rgb(255 255 255 / 0.16);
+  transition: background-position 0.45s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  &:hover {
+    background-position: 100% 50%;
+    box-shadow: 0 10px 24px -8px color-mix(in oklab, var(--color-emerald-700) 55%, transparent), inset 0 1px 0 rgb(255 255 255 / 0.2);
+    transform: translateY(-1px);
+  }
+  &:active { transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { transition: none; &:hover { transform: none; } }
+}
+
+/* Light variant for dark backgrounds (keeps original dark label text). */
+@utility btn-gradient-light {
+  background-color: var(--color-emerald-500);
+  background-image: linear-gradient(135deg, var(--color-emerald-400) 0%, var(--color-emerald-500) 55%, var(--color-emerald-600) 100%);
+  background-size: 160% 100%;
+  background-position: 0% 50%;
+  box-shadow: 0 6px 18px -8px color-mix(in oklab, var(--color-emerald-400) 60%, transparent);
+  transition: background-position 0.45s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  &:hover {
+    background-position: 100% 50%;
+    box-shadow: 0 10px 26px -8px color-mix(in oklab, var(--color-emerald-400) 70%, transparent);
+    transform: translateY(-1px);
+  }
+  @media (prefers-reduced-motion: reduce) { transition: none; &:hover { transform: none; } }
+}
+
+/* Thin emerald accent line for decorative edges. */
+@utility accent-hairline {
+  background-image: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-emerald-500) 55%, transparent) 50%, transparent);
+}
+
+/* Gentle lift for cards on hover. */
+@utility hover-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px -18px rgb(23 23 23 / 0.22);
+    border-color: var(--color-emerald-200);
+  }
+  @media (prefers-reduced-motion: reduce) { &:hover { transform: none; } }
+}
+
 @layer base {
   :root {
-    --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    /* Single family; kept as aliases so existing `.font-display` usage stays valid. */
+    --font-display: var(--font-sans);
+    --font-body: var(--font-sans);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
     color: #171717;
     background-color: #fafafa;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip; /* guard against accidental horizontal scroll; keeps sticky header working */
   }
 
   h1, h2, h3, h4, h5, h6, .font-display {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p, li, blockquote {
+    text-wrap: pretty;
+    overflow-wrap: break-word;
   }
 }
 

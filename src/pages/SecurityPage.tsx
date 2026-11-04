@@ -46,7 +46,7 @@ export default function SecurityPage() {
   ];
 
   return (
-    <div className="space-y-20 sm:space-y-28 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* 1. HERO SECTION */}
       <section className="pt-12 sm:pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -85,7 +85,7 @@ export default function SecurityPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
-          <div className="p-8 rounded-2xl bg-white border border-neutral-200 shadow-xs space-y-4">
+          <div className="hover-lift p-8 rounded-2xl bg-white border border-neutral-200 shadow-xs space-y-4">
             <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
               <Server className="w-5 h-5" />
             </div>
@@ -97,7 +97,7 @@ export default function SecurityPage() {
             </p>
           </div>
 
-          <div className="p-8 rounded-2xl bg-white border border-neutral-200 shadow-xs space-y-4">
+          <div className="hover-lift p-8 rounded-2xl bg-white border border-neutral-200 shadow-xs space-y-4">
             <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
               <KeyRound className="w-5 h-5" />
             </div>
@@ -109,7 +109,7 @@ export default function SecurityPage() {
             </p>
           </div>
 
-          <div className="p-8 rounded-2xl bg-white border border-neutral-200 shadow-xs space-y-4">
+          <div className="hover-lift p-8 rounded-2xl bg-white border border-neutral-200 shadow-xs space-y-4">
             <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
               <FileCheck2 className="w-5 h-5" />
             </div>
@@ -125,7 +125,7 @@ export default function SecurityPage() {
       </section>
 
       {/* 3. TECHNICAL & ORGANIZATIONAL MEASURES (TOMS) */}
-      <section className="bg-neutral-900 text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8">
+      <section className="bg-neutral-900 bg-dark-glow text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="max-w-3xl space-y-3">
             <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
@@ -201,19 +201,19 @@ export default function SecurityPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
             <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 space-y-1">
               <span className="text-xs font-bold text-neutral-900 block">Right to Access (Art. 15)</span>
-              <p className="text-[11px] text-neutral-500">Generate comprehensive donor data dossiers with one click.</p>
+              <p className="text-xs text-neutral-500">Generate comprehensive donor data dossiers with one click.</p>
             </div>
             <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 space-y-1">
               <span className="text-xs font-bold text-neutral-900 block">Right to Erasure (Art. 17)</span>
-              <p className="text-[11px] text-neutral-500">Permanent data deletion tools while respecting statutory tax retention laws.</p>
+              <p className="text-xs text-neutral-500">Permanent data deletion tools while respecting statutory tax retention laws.</p>
             </div>
             <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 space-y-1">
               <span className="text-xs font-bold text-neutral-900 block">Portability (Art. 20)</span>
-              <p className="text-[11px] text-neutral-500">Export clean, structured CSV and JSON packages without vendor lock-in.</p>
+              <p className="text-xs text-neutral-500">Export clean, structured CSV and JSON packages without vendor lock-in.</p>
             </div>
             <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 space-y-1">
               <span className="text-xs font-bold text-neutral-900 block">Consent Logs (Art. 7)</span>
-              <p className="text-[11px] text-neutral-500">Immutable timestamped records of communication and marketing opt-ins.</p>
+              <p className="text-xs text-neutral-500">Immutable timestamped records of communication and marketing opt-ins.</p>
             </div>
           </div>
         </div>
@@ -264,7 +264,7 @@ export default function SecurityPage() {
             <p className="text-xs text-neutral-600 leading-relaxed">
               If your security or compliance team requires a custom security questionnaire, DPA review, or wishes to report a potential vulnerability, contact our dedicated security team directly:
             </p>
-            <div className="pt-1 text-xs font-mono font-semibold text-neutral-900">
+            <div className="pt-1 text-xs tabular-nums font-semibold text-neutral-900">
               security@donorfit.com · PGP Key available upon request
             </div>
           </div>

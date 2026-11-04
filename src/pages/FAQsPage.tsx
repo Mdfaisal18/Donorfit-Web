@@ -20,7 +20,7 @@ export default function FAQsPage() {
   });
 
   return (
-    <div className="space-y-16 sm:space-y-20 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* Hero */}
       <section className="pt-12 sm:pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,7 +91,7 @@ export default function FAQsPage() {
                   </button>
                   {isOpen && (
                     <div className="px-4 sm:px-5 pb-5 pt-1 text-xs sm:text-sm text-neutral-600 leading-relaxed border-t border-neutral-100">
-                      <div className="text-[10px] font-mono text-emerald-700 font-semibold mb-2 uppercase tracking-wider">
+                      <div className="text-[11px] tabular-nums text-emerald-700 font-semibold mb-2 uppercase tracking-wider">
                         Category: {faq.category}
                       </div>
                       <p>{faq.answer}</p>

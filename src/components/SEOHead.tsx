@@ -87,6 +87,9 @@ export default function SEOHead() {
     } else if (currentRoute === '/faqs') {
       title = 'Frequently Asked Questions — Nonprofit Platform & Payments | Donorfit';
       description = 'Find answers to common questions about Donorfit implementation, SEPA Direct Debit, GDPR compliance, tax receipts, and pricing.';
+    } else if (currentRoute === '/pricing') {
+      title = 'Pricing — Zero Platform & Transaction Fees | Donorfit';
+      description = 'Donorfit is an all-in-one fundraising platform for €0 per month: no platform fee and no transaction fee. Collect donations, manage donors and add CRM, recurring, sponsorship and membership modules as you grow.';
     } else if (currentRoute === '/partners') {
       title = 'Donorfit Partner Network — Agencies, Advisors & Integrations';
       description = 'Join the partner network empowering European non-profits through technology, implementation support, and strategic fundraising guidance.';

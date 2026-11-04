@@ -1,5 +1,6 @@
 import React from 'react';
 import { useModal } from '../context/ModalContext.tsx';
+import BrandLogo from './BrandLogo.tsx';
 import { ArrowRight, ShieldCheck, Heart, Globe, Lock } from 'lucide-react';
 
 export default function Footer() {
@@ -10,11 +11,13 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-neutral-900 text-neutral-300 pt-16 pb-12 border-t border-neutral-800">
+    <footer className="relative overflow-hidden bg-neutral-900 bg-dark-glow text-neutral-300 pt-16 pb-12 border-t border-neutral-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Footer Pre-CTA Banner */}
         <div className="relative rounded-2xl bg-neutral-800/80 border border-neutral-700/80 p-8 sm:p-12 mb-16 overflow-hidden">
+          <div aria-hidden="true" className="accent-hairline absolute inset-x-8 top-0 h-px pointer-events-none" />
+          <div aria-hidden="true" className="absolute -top-24 -right-16 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-glow-slow pointer-events-none" />
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="max-w-2xl space-y-2">
               <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
@@ -37,7 +40,7 @@ export default function Footer() {
               </button>
               <button
                 onClick={() => openGetStarted()}
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-neutral-950 font-bold rounded-lg transition-colors cursor-pointer"
+                className="btn-gradient-light inline-flex items-center gap-2 px-6 py-2.5 text-neutral-950 font-bold rounded-lg cursor-pointer"
               >
                 <span>Get Started</span>
                 <ArrowRight className="w-4 h-4" />
@@ -50,16 +53,17 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 pb-12 border-b border-neutral-800 text-xs">
           {/* Col 1: Brand & Positioning */}
           <div className="col-span-2 md:col-span-4 lg:col-span-1 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500 text-neutral-950 flex items-center justify-center font-extrabold text-base">
-                D
-              </div>
-              <span className="text-lg font-bold text-white font-display">Donorfit</span>
-            </div>
+            <button
+              onClick={() => handleNavigate('/')}
+              className="inline-flex cursor-pointer rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+              aria-label="Donorfit — go to homepage"
+            >
+              <BrandLogo onDark className="h-8 sm:h-9" alt="Donorfit" />
+            </button>
             <p className="text-neutral-400 leading-relaxed">
               Fundraising technology built specifically for non-governmental organizations, registered charities, and foundations across Europe and worldwide.
             </p>
-            <div className="pt-2 flex items-center gap-2 text-[11px] text-neutral-400">
+            <div className="pt-2 flex items-center gap-2 text-xs text-neutral-400">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>EU Sovereign Data Hosting · GDPR Compliant</span>
             </div>
@@ -72,6 +76,11 @@ export default function Footer() {
               <li>
                 <button onClick={() => handleNavigate('/')} className="hover:text-white transition-colors cursor-pointer text-left">
                   Donorfit Platform
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigate('/pricing')} className="hover:text-white transition-colors cursor-pointer text-left">
+                  Pricing
                 </button>
               </li>
               <li>
@@ -246,11 +255,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-400">
           <div>
             © {new Date().getFullYear()} Donorfit. All rights reserved. Technology + Humanity + Trust.
           </div>
-          <div className="flex items-center gap-4 text-[11px]">
+          <div className="flex items-center gap-4 text-xs">
             <span>Primary Focus: European Union & International Nonprofits</span>
             <span>·</span>
             <span>Headquarters: Frankfurt am Main, Germany</span>

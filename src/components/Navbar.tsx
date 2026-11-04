@@ -1,603 +1,616 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import { useModal } from '../context/ModalContext.tsx';
-import { 
-  ChevronDown, 
-  Menu, 
-  X, 
-  HeartHandshake, 
-  Sparkles, 
-  Users, 
-  Coins, 
-  CreditCard, 
-  BarChart3, 
-  FileCheck2, 
-  ShieldCheck, 
-  Globe2, 
-  Building2, 
-  BookOpen, 
-  Layers
+import BrandLogo from './BrandLogo.tsx';
+import { APP_LOGIN_URL, APP_SIGNUP_URL } from '../data/links.ts';
+import {
+  ChevronDown,
+  Menu,
+  X,
+  Moon,
+  IdCard,
+  HeartHandshake,
+  PiggyBank,
+  Droplets,
+  GraduationCap,
+  Newspaper,
+  CirclePlay,
+  BookOpenText,
+  ArrowRight,
+  type LucideIcon,
 } from 'lucide-react';
 
+/* ------------------------------------------------------------------ *
+ * Navigation config
+ *
+ * `href: null` = destination page does not exist yet. Such items are shown
+ * as "Coming soon" (not clickable) instead of linking to an invented URL.
+ * To go live, add the route in App.tsx and set the href here.
+ * ------------------------------------------------------------------ */
+
+interface NavItem {
+  label: string;
+  description: string;
+  icon: LucideIcon;
+  href: string | null;
+}
+
+const PRODUCT_ITEMS: NavItem[] = [
+  { label: 'Qurbani', description: 'Seasonal Qurbani & Udhiyah giving campaigns', icon: Moon, href: null },
+  { label: 'Membership', description: 'Automated annual dues and member rolls', icon: IdCard, href: '/membership' },
+  { label: 'Sponsorship', description: 'Manage sponsors, beneficiaries & milestones', icon: HeartHandshake, href: '/sponsorship' },
+  { label: 'Money Pool', description: 'Group giving and collective fundraising', icon: PiggyBank, href: '/money-pool' },
+  { label: 'Water Well', description: 'Fund and report on water well projects', icon: Droplets, href: null },
+  { label: 'School', description: 'Education and school project fundraising', icon: GraduationCap, href: null },
+];
+
+const RESOURCE_ITEMS: NavItem[] = [
+  { label: 'Blog', description: 'Fundraising guides & retention strategies', icon: Newspaper, href: '/blog' },
+  { label: 'Videos', description: 'Walkthroughs and product tutorials', icon: CirclePlay, href: null },
+  { label: 'Product Documentation', description: 'Setup guides and feature reference', icon: BookOpenText, href: null },
+];
+
+/** Integrations content currently lives in a section of the Partners page. */
+const INTEGRATIONS = { path: '/partners', sectionId: 'integrations' };
+/** Pricing page route. */
+const PRICING_HREF: string | null = '/pricing';
+/** Customer app auth — full page redirects in the same tab (see src/data/links.ts). */
+const LOGIN_URL = APP_LOGIN_URL;
+const SIGNUP_URL = APP_SIGNUP_URL;
+
+type MenuId = 'products' | 'resources';
+
+/* ------------------------------------------------------------------ */
+
+function FlagUS({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 19 10" className={className} aria-hidden="true" preserveAspectRatio="none">
+      <rect width="19" height="10" fill="#B22234" />
+      {[1, 3, 5, 7, 9].map((i) => (
+        <rect key={i} y={(i * 10) / 13} width="19" height={10 / 13} fill="#fff" />
+      ))}
+      <rect y={(11 * 10) / 13} width="19" height={10 / 13} fill="#fff" />
+      <rect width="7.6" height={(7 * 10) / 13} fill="#3C3B6E" />
+    </svg>
+  );
+}
+
+function FlagDE({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 5 3" className={className} aria-hidden="true" preserveAspectRatio="none">
+      <rect width="5" height="1" y="0" fill="#000" />
+      <rect width="5" height="1" y="1" fill="#DD0000" />
+      <rect width="5" height="1" y="2" fill="#FFCE00" />
+    </svg>
+  );
+}
+
+function SoonBadge() {
+  return (
+    <span className="ml-1.5 inline-flex items-center rounded-full bg-neutral-100 px-1.5 py-px text-[11px] leading-4 font-semibold uppercase tracking-wide text-neutral-600 ring-1 ring-neutral-200">
+      Soon
+    </span>
+  );
+}
+
+const focusRing =
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600';
+
+/** Lets cmd/ctrl/middle-click open a real URL in a new tab; otherwise uses SPA navigation. */
+function isPlainLeftClick(e: React.MouseEvent) {
+  return e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
+}
+
+/* ------------------------------------------------------------------ */
+
 export default function Navbar() {
-  const { openBookDemo, openGetStarted, navigateTo, currentRoute } = useModal();
+  const { openBookDemo, navigateTo, currentRoute } = useModal();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<'products' | 'solutions' | 'resources' | 'company' | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [mobileSection, setMobileSection] = useState<MenuId | null>(null);
+  const [openMenu, setOpenMenu] = useState<MenuId | null>(null);
 
-  const handleMouseEnter = (menu: 'products' | 'solutions' | 'resources' | 'company') => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setActiveDropdown(menu);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const openedByHover = useRef(false);
+  const navRef = useRef<HTMLElement | null>(null);
+  const triggerRefs = useRef<Record<MenuId, HTMLButtonElement | null>>({ products: null, resources: null });
+  const panelRefs = useRef<Record<MenuId, HTMLDivElement | null>>({ products: null, resources: null });
+  const uid = useId();
+
+  const clearCloseTimer = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = null;
   };
 
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveDropdown(null);
-    }, 150);
-  };
+  const go = useCallback(
+    (path: string, sectionId?: string) => {
+      clearCloseTimer();
+      setOpenMenu(null);
+      setMobileMenuOpen(false);
+      navigateTo(path);
+      if (sectionId) {
+        // Wait for the page to render, then bring the section into view.
+        window.setTimeout(() => {
+          document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
+      }
+    },
+    [navigateTo],
+  );
 
+  // Close menus on outside click, Escape, and route change.
   useEffect(() => {
+    const onPointerDown = (e: PointerEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setOpenMenu(null);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKey);
     return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKey);
+      clearCloseTimer();
     };
   }, []);
 
-  const handleNavigate = (path: string) => {
-    setActiveDropdown(null);
+  useEffect(() => {
+    setOpenMenu(null);
     setMobileMenuOpen(false);
-    navigateTo(path);
+  }, [currentRoute]);
+
+  /* ---------- desktop dropdown behaviour ---------- */
+
+  const handlePointerEnter = (id: MenuId) => (e: React.PointerEvent) => {
+    if (e.pointerType !== 'mouse') return; // touch/pen use click
+    clearCloseTimer();
+    if (openMenu !== id) openedByHover.current = true;
+    setOpenMenu(id);
   };
 
-  return (
-    <header className="sticky top-0 z-30 w-full bg-white/85 backdrop-blur-xl border-b border-neutral-200/80 shadow-xs transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18 gap-8">
-          
-          {/* Zone 1: Single text element wordmark */}
-          <button
-            onClick={() => handleNavigate('/')}
-            className="flex items-center gap-2.5 text-left group cursor-pointer shrink-0"
+  const handlePointerLeave = (e: React.PointerEvent) => {
+    if (e.pointerType !== 'mouse') return;
+    clearCloseTimer();
+    closeTimer.current = setTimeout(() => setOpenMenu(null), 160);
+  };
+
+  const handleTriggerClick = (id: MenuId) => {
+    // A mouse click right after hover-opening keeps the menu open instead of toggling it shut.
+    if (openMenu === id && openedByHover.current) {
+      openedByHover.current = false;
+      return;
+    }
+    openedByHover.current = false;
+    setOpenMenu(openMenu === id ? null : id);
+  };
+
+  const focusableItems = (id: MenuId) =>
+    Array.from(panelRefs.current[id]?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? []);
+
+  const handleTriggerKeyDown = (id: MenuId) => (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      openedByHover.current = false;
+      setOpenMenu(id);
+      requestAnimationFrame(() => focusableItems(id)[0]?.focus());
+    } else if (e.key === 'Escape') {
+      setOpenMenu(null);
+    }
+  };
+
+  const handlePanelKeyDown = (id: MenuId) => (e: React.KeyboardEvent) => {
+    const items = focusableItems(id);
+    const idx = items.indexOf(document.activeElement as HTMLElement);
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      setOpenMenu(null);
+      triggerRefs.current[id]?.focus();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      items[(idx + 1) % items.length]?.focus();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      items[(idx - 1 + items.length) % items.length]?.focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      items[0]?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      items[items.length - 1]?.focus();
+    }
+  };
+
+  const handleGroupBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    // Close when keyboard focus leaves the trigger + panel group.
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpenMenu(null);
+  };
+
+  const isSectionActive = (items: NavItem[]) => items.some((i) => i.href && currentRoute === i.href);
+
+  /* ---------- shared render helpers ---------- */
+
+  const renderDropdownItem = (item: NavItem, compact = false) => {
+    const Icon = item.icon;
+    const active = item.href !== null && currentRoute === item.href;
+    const inner = (
+      <>
+        <span
+          className={`flex shrink-0 items-center justify-center rounded-lg ring-1 transition-colors ${
+            compact ? 'h-8 w-8' : 'h-9 w-9'
+          } ${
+            item.href
+              ? 'bg-emerald-50 text-emerald-700 ring-emerald-100 group-hover:bg-emerald-600 group-hover:text-white group-hover:ring-emerald-600 group-focus-visible:bg-emerald-600 group-focus-visible:text-white'
+              : 'bg-neutral-50 text-neutral-400 ring-neutral-200'
+          }`}
+        >
+          <Icon className="h-4.5 w-4.5" aria-hidden="true" />
+        </span>
+        <span className="min-w-0">
+          <span
+            className={`flex items-center text-sm font-semibold ${
+              item.href ? 'text-neutral-900 group-hover:text-emerald-700' : 'text-neutral-500'
+            } ${active ? 'text-emerald-700' : ''}`}
           >
-            <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-extrabold text-lg shadow-xs group-hover:bg-emerald-700 transition-colors">
-              D
-            </div>
-            <span className="text-xl font-bold tracking-tight text-neutral-950 font-display whitespace-nowrap">
-              Donorfit
-            </span>
-          </button>
+            {item.label}
+            {!item.href && <SoonBadge />}
+          </span>
+          <span className={`mt-0.5 block text-xs leading-snug ${item.href ? 'text-neutral-500' : 'text-neutral-400'}`}>
+            {item.description}
+          </span>
+        </span>
+      </>
+    );
 
-          {/* Zone 2: Navigation Links & Dropdowns */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-sm font-medium text-neutral-700">
-            {/* Products Dropdown */}
-            <div 
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('products')}
-              onMouseLeave={handleMouseLeave}
-            >
-              <button
-                type="button"
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg hover:text-neutral-950 hover:bg-neutral-100/70 transition-colors whitespace-nowrap cursor-pointer ${
-                  activeDropdown === 'products' ? 'text-neutral-950 bg-neutral-100/70' : ''
-                }`}
-                onClick={() => setActiveDropdown(activeDropdown === 'products' ? null : 'products')}
-              >
-                <span>Products</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'products' ? 'rotate-180' : ''}`} />
-              </button>
+    const base = 'group flex w-full items-start gap-3 rounded-xl p-2.5 text-left transition-colors';
 
-              {activeDropdown === 'products' && (
-                <div 
-                  className="absolute left-0 top-full pt-2 w-140 z-50 animate-in fade-in-50 zoom-in-95 duration-150"
-                  onMouseEnter={() => handleMouseEnter('products')}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="bg-white rounded-2xl shadow-2xl border border-neutral-200 p-4 grid grid-cols-2 gap-2">
-                    <button
-                      onClick={() => handleNavigate('/sponsorship')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <div className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 flex items-center gap-1.5">
-                        <span>Sponsorship</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-0.5 line-clamp-1">Manage sponsors, beneficiaries & milestones</p>
-                    </button>
+    if (!item.href) {
+      return (
+        <span className={`${base} cursor-default`} aria-disabled="true" title="Coming soon">
+          {inner}
+        </span>
+      );
+    }
+    const href = item.href;
+    return (
+      <a
+        href={href}
+        aria-current={active ? 'page' : undefined}
+        onClick={(e) => {
+          if (!isPlainLeftClick(e)) return;
+          e.preventDefault();
+          go(href);
+        }}
+        className={`${base} hover:bg-neutral-50 ${active ? 'bg-emerald-50/60' : ''} ${focusRing}`}
+      >
+        {inner}
+      </a>
+    );
+  };
 
-                    <button
-                      onClick={() => handleNavigate('/orphan-sponsorship')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <div className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 flex items-center gap-1.5">
-                        <span>Orphan Sponsorship</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-0.5 line-clamp-1">Ethical child care with strict safeguarding</p>
-                    </button>
+  const triggerClass = (id: MenuId, active: boolean) =>
+    `flex items-center gap-1 rounded-lg px-3 py-2 whitespace-nowrap transition-colors cursor-pointer hover:bg-neutral-100/70 hover:text-neutral-950 ${focusRing} ${
+      openMenu === id || active ? 'text-neutral-950' : ''
+    } ${openMenu === id ? 'bg-neutral-100/70' : ''}`;
 
-                    <button
-                      onClick={() => handleNavigate('/money-pool')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <div className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 flex items-center gap-1.5">
-                        <span>Money Pool</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-0.5 line-clamp-1">Group giving and collective fundraising</p>
-                    </button>
+  const panelClass = (id: MenuId) =>
+    `absolute left-0 top-full z-40 pt-2.5 origin-top transition duration-200 ease-out motion-reduce:transition-none ${
+      openMenu === id
+        ? 'visible translate-y-0 scale-100 opacity-100'
+        : 'invisible pointer-events-none -translate-y-1 scale-[0.98] opacity-0'
+    }`;
 
-                    <button
-                      onClick={() => handleNavigate('/membership')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <div className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 flex items-center gap-1.5">
-                        <span>Membership</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-0.5 line-clamp-1">Automated annual dues and member rolls</p>
-                    </button>
+  const renderDesktopDropdown = (id: MenuId, label: string, items: NavItem[], panel: React.ReactNode) => {
+    const panelId = `${uid}-${id}-panel`;
+    return (
+      <div
+        className="relative"
+        onPointerEnter={handlePointerEnter(id)}
+        onPointerLeave={handlePointerLeave}
+        onBlur={handleGroupBlur}
+      >
+        <button
+          ref={(el) => {
+            triggerRefs.current[id] = el;
+          }}
+          type="button"
+          aria-expanded={openMenu === id}
+          aria-controls={panelId}
+          onClick={() => handleTriggerClick(id)}
+          onKeyDown={handleTriggerKeyDown(id)}
+          className={triggerClass(id, isSectionActive(items))}
+        >
+          <span>{label}</span>
+          <ChevronDown
+            aria-hidden="true"
+            className={`h-4 w-4 transition-transform duration-200 ${openMenu === id ? 'rotate-180' : ''}`}
+          />
+        </button>
+        <div
+          id={panelId}
+          ref={(el) => {
+            panelRefs.current[id] = el;
+          }}
+          className={panelClass(id)}
+          onKeyDown={handlePanelKeyDown(id)}
+        >
+          {panel}
+        </div>
+      </div>
+    );
+  };
 
-                    <button
-                      onClick={() => handleNavigate('/donations')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <div className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 flex items-center gap-1.5">
-                        <span>Donations</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-0.5 line-clamp-1">High-converting forms with SEPA & cards</p>
-                    </button>
+  /* ---------- render ---------- */
 
-                    <button
-                      onClick={() => handleNavigate('/recurring-giving')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <div className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 flex items-center gap-1.5">
-                        <span>Recurring Giving</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-0.5 line-clamp-1">Automated dunning & card churn recovery</p>
-                    </button>
+  return (
+    <header className="sticky top-0 z-30 w-full border-b border-neutral-200/80 bg-white/85 shadow-xs backdrop-blur-xl transition-all">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-18 items-center justify-between gap-4 lg:gap-8">
+          {/* Logo */}
+          <a
+            href="/"
+            onClick={(e) => {
+              if (!isPlainLeftClick(e)) return;
+              e.preventDefault();
+              go('/');
+            }}
+            className={`flex shrink-0 items-center rounded-lg transition-opacity hover:opacity-90 ${focusRing}`}
+            aria-label="Donorfit — go to homepage"
+          >
+            <BrandLogo priority className="h-8 sm:h-9 lg:h-10" alt="Donorfit" />
+          </a>
 
-                    <button
-                      onClick={() => handleNavigate('/donor-management')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <div className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 flex items-center gap-1.5">
-                        <span>Donor Management</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-0.5 line-clamp-1">Centralized European non-profit CRM</p>
-                    </button>
-
-                    <button
-                      onClick={() => handleNavigate('/campaign-management')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <div className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 flex items-center gap-1.5">
-                        <span>Campaign Management</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-0.5 line-clamp-1">Emergency appeals & matched campaigns</p>
-                    </button>
-
-                    <button
-                      onClick={() => handleNavigate('/reporting-and-insights')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group col-span-2 bg-neutral-50/70 border border-neutral-100"
-                    >
-                      <div className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 flex items-center gap-1.5">
-                        <BarChart3 className="w-4 h-4 text-emerald-600" />
-                        <span>Reporting & Insights</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 mt-0.5">Cohort retention, statutory tax ledgers & board briefs</p>
-                    </button>
-                  </div>
+          {/* Desktop navigation */}
+          <nav
+            ref={navRef}
+            aria-label="Main"
+            className="hidden items-center gap-1 text-sm font-medium text-neutral-700 lg:flex xl:gap-2"
+          >
+            {renderDesktopDropdown(
+              'products',
+              'Products',
+              PRODUCT_ITEMS,
+              <div className="w-[34rem] overflow-hidden rounded-2xl border border-neutral-200/90 bg-white shadow-xl shadow-neutral-900/10 ring-1 ring-black/[0.02]">
+                <ul className="grid grid-cols-2 gap-1 p-3">
+                  {PRODUCT_ITEMS.map((item) => (
+                    <li key={item.label}>{renderDropdownItem(item)}</li>
+                  ))}
+                </ul>
+                <div className="flex items-center justify-between gap-4 border-t border-neutral-100 bg-neutral-50/80 px-5 py-3 text-xs">
+                  <span className="text-neutral-500">Not sure which product fits your organisation?</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpenMenu(null);
+                      openBookDemo();
+                    }}
+                    className={`inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-md font-semibold text-emerald-700 hover:text-emerald-800 ${focusRing}`}
+                  >
+                    Book a demo <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
                 </div>
-              )}
-            </div>
+              </div>,
+            )}
 
-            {/* Solutions Dropdown */}
-            <div 
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('solutions')}
-              onMouseLeave={handleMouseLeave}
-            >
-              <button
-                type="button"
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg hover:text-neutral-950 hover:bg-neutral-100/70 transition-colors whitespace-nowrap cursor-pointer ${
-                  activeDropdown === 'solutions' ? 'text-neutral-950 bg-neutral-100/70' : ''
-                }`}
-                onClick={() => setActiveDropdown(activeDropdown === 'solutions' ? null : 'solutions')}
-              >
-                <span>Solutions</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'solutions' ? 'rotate-180' : ''}`} />
-              </button>
-
-              {activeDropdown === 'solutions' && (
-                <div 
-                  className="absolute left-0 top-full pt-2 w-120 z-50 animate-in fade-in-50 zoom-in-95 duration-150"
-                  onMouseEnter={() => handleMouseEnter('solutions')}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="bg-white rounded-2xl shadow-2xl border border-neutral-200 p-4 grid grid-cols-2 gap-2">
-                    <button
-                      onClick={() => handleNavigate('/solutions/ngos')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">For NGOs</span>
-                      <p className="text-xs text-neutral-500 mt-0.5">Cross-border field & donor coordination</p>
-                    </button>
-
-                    <button
-                      onClick={() => handleNavigate('/solutions/charities')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">For Charities</span>
-                      <p className="text-xs text-neutral-500 mt-0.5">Automated tax receipts & local appeals</p>
-                    </button>
-
-                    <button
-                      onClick={() => handleNavigate('/solutions/foundations')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">For Foundations</span>
-                      <p className="text-xs text-neutral-500 mt-0.5">Restricted fund stewardship & boards</p>
-                    </button>
-
-                    <button
-                      onClick={() => handleNavigate('/solutions/sponsorship-organizations')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">For Sponsorship Orgs</span>
-                      <p className="text-xs text-neutral-500 mt-0.5">Child & community recurring care</p>
-                    </button>
-
-                    <button
-                      onClick={() => handleNavigate('/solutions/membership-organizations')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">For Membership Orgs</span>
-                      <p className="text-xs text-neutral-500 mt-0.5">Annual dues & verified roll calls</p>
-                    </button>
-
-                    <button
-                      onClick={() => handleNavigate('/solutions/international-organizations')}
-                      className="p-3 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group"
-                    >
-                      <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">For International Orgs</span>
-                      <p className="text-xs text-neutral-500 mt-0.5">Multi-entity & global currencies</p>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Resources Dropdown */}
-            <div 
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('resources')}
-              onMouseLeave={handleMouseLeave}
-            >
-              <button
-                type="button"
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg hover:text-neutral-950 hover:bg-neutral-100/70 transition-colors whitespace-nowrap cursor-pointer ${
-                  activeDropdown === 'resources' ? 'text-neutral-950 bg-neutral-100/70' : ''
-                }`}
-                onClick={() => setActiveDropdown(activeDropdown === 'resources' ? null : 'resources')}
-              >
-                <span>Resources</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'resources' ? 'rotate-180' : ''}`} />
-              </button>
-
-              {activeDropdown === 'resources' && (
-                <div 
-                  className="absolute left-0 top-full pt-2 w-72 z-50 animate-in fade-in-50 zoom-in-95 duration-150"
-                  onMouseEnter={() => handleMouseEnter('resources')}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="bg-white rounded-2xl shadow-2xl border border-neutral-200 p-3 space-y-1">
-                    <button
-                      onClick={() => handleNavigate('/blog')}
-                      className="w-full p-2.5 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group flex items-start gap-2.5"
-                    >
-                      <BookOpen className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
-                      <div>
-                        <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">Resource Center & Blog</span>
-                        <p className="text-xs text-neutral-500">Fundraising guides & retention strategies</p>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => handleNavigate('/guides')}
-                      className="w-full p-2.5 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group flex items-start gap-2.5"
-                    >
-                      <FileCheck2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
-                      <div>
-                        <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">Practical Guides</span>
-                        <p className="text-xs text-neutral-500">Downloadable SEPA & tax handbooks</p>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => handleNavigate('/case-studies')}
-                      className="w-full p-2.5 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group flex items-start gap-2.5"
-                    >
-                      <Sparkles className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
-                      <div>
-                        <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">Case Studies</span>
-                        <p className="text-xs text-neutral-500">Proven non-profit impact stories</p>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => handleNavigate('/faqs')}
-                      className="w-full p-2.5 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group flex items-start gap-2.5"
-                    >
-                      <Layers className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
-                      <div>
-                        <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">Frequently Asked Questions</span>
-                        <p className="text-xs text-neutral-500">Answers to implementation & banking</p>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Company Dropdown */}
-            <div 
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('company')}
-              onMouseLeave={handleMouseLeave}
-            >
-              <button
-                type="button"
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg hover:text-neutral-950 hover:bg-neutral-100/70 transition-colors whitespace-nowrap cursor-pointer ${
-                  activeDropdown === 'company' ? 'text-neutral-950 bg-neutral-100/70' : ''
-                }`}
-                onClick={() => setActiveDropdown(activeDropdown === 'company' ? null : 'company')}
-              >
-                <span>Company</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'company' ? 'rotate-180' : ''}`} />
-              </button>
-
-              {activeDropdown === 'company' && (
-                <div 
-                  className="absolute left-0 top-full pt-2 w-64 z-50 animate-in fade-in-50 zoom-in-95 duration-150"
-                  onMouseEnter={() => handleMouseEnter('company')}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="bg-white rounded-2xl shadow-2xl border border-neutral-200 p-3 space-y-1">
-                    <button
-                      onClick={() => handleNavigate('/about')}
-                      className="w-full p-2.5 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group block"
-                    >
-                      <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">About Donorfit</span>
-                      <p className="text-xs text-neutral-500">Mission, heritage & non-profit focus</p>
-                    </button>
-                    <button
-                      onClick={() => handleNavigate('/security')}
-                      className="w-full p-2.5 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group flex items-start gap-2"
-                    >
-                      <div>
-                        <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">Security & Trust</span>
-                        <p className="text-xs text-neutral-500">GDPR, EU hosting & data safety</p>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => handleNavigate('/partners')}
-                      className="w-full p-2.5 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group block"
-                    >
-                      <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">Partners</span>
-                      <p className="text-xs text-neutral-500">Advisors, agencies & integrations</p>
-                    </button>
-                    <button
-                      onClick={() => handleNavigate('/contact')}
-                      className="w-full p-2.5 text-left rounded-xl hover:bg-neutral-50 transition-colors cursor-pointer group block"
-                    >
-                      <span className="font-semibold text-neutral-900 text-sm group-hover:text-emerald-700 block">Contact</span>
-                      <p className="text-xs text-neutral-500">Direct inquiries & European office</p>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <button
-              onClick={() => handleNavigate('/security')}
-              className={`px-3 py-2 rounded-lg hover:text-neutral-950 hover:bg-neutral-100/70 transition-colors whitespace-nowrap cursor-pointer ${
-                currentRoute === '/security' ? 'text-neutral-950 font-semibold' : ''
+            <a
+              href={INTEGRATIONS.path}
+              onClick={(e) => {
+                if (!isPlainLeftClick(e)) return;
+                e.preventDefault();
+                go(INTEGRATIONS.path, INTEGRATIONS.sectionId);
+              }}
+              aria-current={currentRoute === INTEGRATIONS.path ? 'page' : undefined}
+              className={`rounded-lg px-3 py-2 whitespace-nowrap transition-colors hover:bg-neutral-100/70 hover:text-neutral-950 ${focusRing} ${
+                currentRoute === INTEGRATIONS.path ? 'text-neutral-950' : ''
               }`}
             >
-              Security
-            </button>
+              Integrations
+            </a>
+
+            {renderDesktopDropdown(
+              'resources',
+              'Resources',
+              RESOURCE_ITEMS,
+              <div className="w-80 rounded-2xl border border-neutral-200/90 bg-white p-2.5 shadow-xl shadow-neutral-900/10 ring-1 ring-black/[0.02]">
+                <ul className="space-y-0.5">
+                  {RESOURCE_ITEMS.map((item) => (
+                    <li key={item.label}>{renderDropdownItem(item, true)}</li>
+                  ))}
+                </ul>
+              </div>,
+            )}
+
+            {PRICING_HREF ? (
+              <a
+                href={PRICING_HREF}
+                onClick={(e) => {
+                  if (!isPlainLeftClick(e)) return;
+                  e.preventDefault();
+                  go(PRICING_HREF);
+                }}
+                className={`rounded-lg px-3 py-2 whitespace-nowrap transition-colors hover:bg-neutral-100/70 hover:text-neutral-950 ${focusRing}`}
+              >
+                Pricing
+              </a>
+            ) : (
+              <span
+                className="flex cursor-default items-center rounded-lg px-3 py-2 whitespace-nowrap text-neutral-400"
+                aria-disabled="true"
+                title="Pricing page coming soon"
+              >
+                Pricing
+                <SoonBadge />
+              </span>
+            )}
+
+            {/* Language selector */}
+            <div role="group" aria-label="Language" className="ml-1 flex items-center gap-1 border-l border-neutral-200 pl-3">
+              <button
+                type="button"
+                aria-pressed="true"
+                aria-label="English (current)"
+                title="English"
+                className={`rounded-md p-1.5 ring-1 ring-emerald-600/40 bg-emerald-50 ${focusRing}`}
+              >
+                <FlagUS className="block h-3.5 w-5 rounded-[2px] shadow-[0_0_0_0.5px_rgba(0,0,0,0.15)]" />
+              </button>
+              <button
+                type="button"
+                disabled
+                aria-label="Deutsch (coming soon)"
+                title="Deutsche Version folgt in Kürze"
+                className="cursor-not-allowed rounded-md p-1.5 opacity-50 grayscale-[30%]"
+              >
+                <FlagDE className="block h-3.5 w-5 rounded-[2px] shadow-[0_0_0_0.5px_rgba(0,0,0,0.15)]" />
+              </button>
+            </div>
           </nav>
 
-          {/* Zone 3: CTA Buttons */}
-          <div className="hidden sm:flex items-center gap-3 shrink-0">
-            <button
-              onClick={() => openBookDemo()}
-              className="px-4 py-2 text-xs font-semibold text-neutral-800 hover:text-neutral-950 hover:bg-neutral-100 rounded-lg transition-colors whitespace-nowrap cursor-pointer"
+          {/* Right: account actions */}
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <a
+              href={LOGIN_URL}
+              className={`hidden rounded-full px-4 py-2 text-sm font-semibold text-neutral-800 transition-colors hover:bg-neutral-100 hover:text-neutral-950 lg:inline-flex ${focusRing}`}
             >
-              Book a Demo
-            </button>
-            <button
-              onClick={() => openGetStarted()}
-              className="px-4.5 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-xs transition-colors whitespace-nowrap cursor-pointer"
+              Log In
+            </a>
+            <a
+              href={SIGNUP_URL}
+              className={`btn-gradient hidden rounded-full px-5 py-2.5 text-sm font-semibold whitespace-nowrap sm:inline-flex ${focusRing}`}
             >
-              Get Started
-            </button>
-          </div>
+              Sign Up
+            </a>
 
-          {/* Mobile Menu Trigger */}
-          <div className="flex sm:hidden items-center gap-2">
+            {/* Mobile / tablet menu trigger */}
             <button
-              onClick={() => openGetStarted()}
-              className="px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 rounded-lg"
+              type="button"
+              onClick={() => setMobileMenuOpen((v) => !v)}
+              aria-expanded={mobileMenuOpen}
+              aria-controls={`${uid}-mobile`}
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              className={`cursor-pointer rounded-lg p-2 text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 lg:hidden ${focusRing}`}
             >
-              Get Started
-            </button>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-neutral-700 hover:text-neutral-900 rounded-lg focus:outline-hidden"
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-neutral-200 px-4 pt-2 pb-6 space-y-4 max-h-[85vh] overflow-y-auto">
-          <div className="space-y-1">
-            <div className="text-xs font-bold text-neutral-400 uppercase tracking-wider px-3 py-1">Products</div>
-            <button
-              onClick={() => handleNavigate('/sponsorship')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Sponsorship
-            </button>
-            <button
-              onClick={() => handleNavigate('/orphan-sponsorship')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Orphan Sponsorship
-            </button>
-            <button
-              onClick={() => handleNavigate('/money-pool')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Money Pool
-            </button>
-            <button
-              onClick={() => handleNavigate('/membership')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Membership
-            </button>
-            <button
-              onClick={() => handleNavigate('/donations')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Donations
-            </button>
-            <button
-              onClick={() => handleNavigate('/recurring-giving')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Recurring Giving
-            </button>
-            <button
-              onClick={() => handleNavigate('/donor-management')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Donor Management
-            </button>
-            <button
-              onClick={() => handleNavigate('/campaign-management')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Campaign Management
-            </button>
-            <button
-              onClick={() => handleNavigate('/reporting-and-insights')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Reporting & Insights
-            </button>
-          </div>
+      {/* Mobile / tablet drawer */}
+      <div
+        id={`${uid}-mobile`}
+        className={`grid border-neutral-200 bg-white transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none lg:hidden ${
+          mobileMenuOpen ? 'grid-rows-[1fr] border-b opacity-100' : 'invisible grid-rows-[0fr] opacity-0'
+        }`}
+      >
+        <div className="overflow-hidden">
+          <nav aria-label="Mobile" className="max-h-[calc(100dvh-4.5rem)] space-y-1 overflow-y-auto px-4 pt-2 pb-6 sm:px-6">
+            {(
+              [
+                ['products', 'Products', PRODUCT_ITEMS],
+                ['resources', 'Resources', RESOURCE_ITEMS],
+              ] as const
+            ).map(([id, label, items]) => {
+              const expanded = mobileSection === id;
+              return (
+                <div key={id} className="border-b border-neutral-100 pb-1">
+                  <button
+                    type="button"
+                    aria-expanded={expanded}
+                    aria-controls={`${uid}-m-${id}`}
+                    onClick={() => setMobileSection(expanded ? null : id)}
+                    className={`flex w-full cursor-pointer items-center justify-between rounded-lg px-3 py-3 text-base font-semibold text-neutral-900 hover:bg-neutral-50 ${focusRing}`}
+                  >
+                    {label}
+                    <ChevronDown
+                      aria-hidden="true"
+                      className={`h-5 w-5 text-neutral-500 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                  <div
+                    id={`${uid}-m-${id}`}
+                    className={`grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none ${
+                      expanded ? 'grid-rows-[1fr]' : 'invisible grid-rows-[0fr]'
+                    }`}
+                  >
+                    <ul className="grid gap-0.5 overflow-hidden sm:grid-cols-2">
+                      {items.map((item) => (
+                        <li key={item.label}>{renderDropdownItem(item, true)}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              );
+            })}
 
-          <div className="space-y-1 pt-2 border-t border-neutral-100">
-            <div className="text-xs font-bold text-neutral-400 uppercase tracking-wider px-3 py-1">Solutions</div>
-            <button
-              onClick={() => handleNavigate('/solutions/ngos')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              For NGOs
-            </button>
-            <button
-              onClick={() => handleNavigate('/solutions/charities')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              For Charities
-            </button>
-            <button
-              onClick={() => handleNavigate('/solutions/foundations')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              For Foundations
-            </button>
-            <button
-              onClick={() => handleNavigate('/solutions/sponsorship-organizations')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              For Sponsorship Organizations
-            </button>
-            <button
-              onClick={() => handleNavigate('/solutions/membership-organizations')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              For Membership Organizations
-            </button>
-            <button
-              onClick={() => handleNavigate('/solutions/international-organizations')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              For International Aid Organizations
-            </button>
-          </div>
-
-          <div className="space-y-1 pt-2 border-t border-neutral-100">
-            <div className="text-xs font-bold text-neutral-400 uppercase tracking-wider px-3 py-1">Company & Resources</div>
-            <button
-              onClick={() => handleNavigate('/about')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              About Donorfit
-            </button>
-            <button
-              onClick={() => handleNavigate('/security')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Security & Trust
-            </button>
-            <button
-              onClick={() => handleNavigate('/blog')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Blog & Resource Center
-            </button>
-            <button
-              onClick={() => handleNavigate('/guides')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Guides & Whitepapers
-            </button>
-            <button
-              onClick={() => handleNavigate('/case-studies')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Case Studies
-            </button>
-            <button
-              onClick={() => handleNavigate('/contact')}
-              className="w-full text-left px-3 py-2 text-sm font-medium text-neutral-800 rounded-lg hover:bg-neutral-100"
-            >
-              Contact Us
-            </button>
-          </div>
-
-          <div className="pt-4 border-t border-neutral-100 flex flex-col gap-2">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                openBookDemo();
+            <a
+              href={INTEGRATIONS.path}
+              onClick={(e) => {
+                if (!isPlainLeftClick(e)) return;
+                e.preventDefault();
+                go(INTEGRATIONS.path, INTEGRATIONS.sectionId);
               }}
-              className="w-full py-2.5 text-center text-sm font-semibold text-neutral-800 bg-neutral-100 rounded-lg"
+              className={`block rounded-lg border-b border-neutral-100 px-3 py-3 text-base font-semibold text-neutral-900 hover:bg-neutral-50 ${focusRing}`}
             >
-              Book a Demo
-            </button>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                openGetStarted();
-              }}
-              className="w-full py-2.5 text-center text-sm font-semibold text-white bg-emerald-600 rounded-lg"
-            >
-              Get Started Now
-            </button>
-          </div>
+              Integrations
+            </a>
+
+            {PRICING_HREF ? (
+              <a
+                href={PRICING_HREF}
+                onClick={(e) => {
+                  if (!isPlainLeftClick(e)) return;
+                  e.preventDefault();
+                  go(PRICING_HREF);
+                }}
+                className={`block rounded-lg border-b border-neutral-100 px-3 py-3 text-base font-semibold text-neutral-900 hover:bg-neutral-50 ${focusRing}`}
+              >
+                Pricing
+              </a>
+            ) : (
+              <span
+                aria-disabled="true"
+                className="flex items-center border-b border-neutral-100 px-3 py-3 text-base font-semibold text-neutral-400"
+              >
+                Pricing <SoonBadge />
+              </span>
+            )}
+
+            <div role="group" aria-label="Language" className="flex items-center gap-2 px-3 py-3">
+              <span className="mr-1 text-xs font-semibold uppercase tracking-wider text-neutral-400">Language</span>
+              <button
+                type="button"
+                aria-pressed="true"
+                className={`inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-2.5 py-1.5 text-sm font-medium text-neutral-900 ring-1 ring-emerald-600/40 ${focusRing}`}
+              >
+                <FlagUS className="block h-3.5 w-5 rounded-[2px]" /> English
+              </button>
+              <button
+                type="button"
+                disabled
+                title="Deutsche Version folgt in Kürze"
+                className="inline-flex cursor-not-allowed items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm font-medium text-neutral-400 opacity-70"
+              >
+                <FlagDE className="block h-3.5 w-5 rounded-[2px]" /> Deutsch
+                <SoonBadge />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2 pt-3 sm:flex-row">
+              <a
+                href={LOGIN_URL}
+                className={`w-full rounded-full border border-neutral-300 py-2.5 text-center text-sm font-semibold text-neutral-800 transition-colors hover:bg-neutral-50 ${focusRing}`}
+              >
+                Log In
+              </a>
+              <a
+                href={SIGNUP_URL}
+                className={`btn-gradient w-full rounded-full py-2.5 text-center text-sm font-semibold ${focusRing}`}
+              >
+                Sign Up
+              </a>
+            </div>
+          </nav>
         </div>
-      )}
+      </div>
     </header>
   );
 }

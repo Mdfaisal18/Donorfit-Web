@@ -39,7 +39,7 @@ export default function BlogPostPage({ slug }: BlogPostPageProps) {
   const relatedArticles = BLOG_POSTS.filter((p) => post.relatedArticleSlugs.includes(p.slug));
 
   return (
-    <div className="py-12 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <div className="py-12 sm:py-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       
       {/* Back button */}
       <div>
@@ -65,7 +65,7 @@ export default function BlogPostPage({ slug }: BlogPostPageProps) {
           {post.updatedAt && (
             <>
               <span aria-hidden="true">·</span>
-              <span className="text-neutral-400">Updated {post.updatedAt}</span>
+              <span className="text-neutral-500">Updated {post.updatedAt}</span>
             </>
           )}
         </div>
@@ -84,7 +84,7 @@ export default function BlogPostPage({ slug }: BlogPostPageProps) {
               <div className="text-xs text-neutral-500">{post.author.role}</div>
             </div>
           </div>
-          <div className="text-xs text-neutral-400">
+          <div className="text-xs text-neutral-500">
             Verified Educational Resource
           </div>
         </div>
@@ -139,7 +139,7 @@ export default function BlogPostPage({ slug }: BlogPostPageProps) {
       )}
 
       {/* CTA Box */}
-      <div className="p-8 rounded-2xl bg-neutral-900 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div className="p-8 rounded-2xl bg-neutral-900 bg-dark-glow text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div className="space-y-1 max-w-md">
           <h3 className="text-xl font-bold font-display">Put this knowledge into practice</h3>
           <p className="text-xs text-neutral-300 leading-relaxed">

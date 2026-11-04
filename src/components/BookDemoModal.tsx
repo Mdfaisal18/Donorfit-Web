@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useModal } from '../context/ModalContext.tsx';
 import { X, CheckCircle2, Calendar, Clock, ShieldCheck, ArrowRight } from 'lucide-react';
+import BrandLogo from './BrandLogo.tsx';
 
 export default function BookDemoModal() {
   const { isBookDemoOpen, closeBookDemo, selectedModule } = useModal();
@@ -41,11 +42,14 @@ export default function BookDemoModal() {
       >
         {/* Header bar */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-neutral-50/70">
-          <div>
+          <div className="flex items-center gap-3">
+            <BrandLogo variant="icon" className="h-10 shrink-0" alt="" />
+            <div>
             <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Live Demonstration</span>
             <h2 id="modal-headline" className="text-lg font-bold text-neutral-950 font-display">
               Schedule a 1-on-1 Product Demo
             </h2>
+            </div>
           </div>
           <button
             onClick={resetAndClose}

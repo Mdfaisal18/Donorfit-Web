@@ -79,7 +79,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const heroImage = getProductImage();
 
   return (
-    <div className="space-y-24 sm:space-y-36 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* 1. HERO SECTION: DUAL-PANE WITH VISUAL ASSET & INTERACTIVE MOCKUP */}
       <section className="relative pt-12 sm:pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -102,7 +102,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
                 onClick={() => openGetStarted(product.id)}
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-emerald-700/20 transition-all cursor-pointer"
+                className="btn-gradient inline-flex items-center gap-2 px-7 py-3.5 font-bold text-xs sm:text-sm rounded-xl cursor-pointer"
               >
                 <span>Get Started with {product.title}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -169,8 +169,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {product.problemsAddressed.map((p, i) => (
-              <div key={i} className="p-8 rounded-3xl bg-white border border-neutral-200/90 shadow-xs space-y-3">
-                <div className="text-xs font-mono font-bold text-rose-600">Challenge 0{i + 1}</div>
+              <div key={i} className="hover-lift p-8 rounded-3xl bg-white border border-neutral-200/90 shadow-xs space-y-3">
+                <div className="text-xs tabular-nums font-bold text-rose-600">Challenge 0{i + 1}</div>
                 <h3 className="text-lg font-bold text-neutral-900 font-display">{p.title}</h3>
                 <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">{p.description}</p>
               </div>
@@ -204,7 +204,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
       </section>
 
       {/* 5. CAPABILITIES & ORGANIZATIONAL BENEFITS: DARK CONTRAST SECTION */}
-      <section className="bg-neutral-950 text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8 border border-neutral-800 shadow-2xl">
+      <section className="bg-neutral-950 bg-dark-glow text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8 border border-neutral-800 shadow-2xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
           
           <div>
@@ -318,7 +318,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
         {/* Related products */}
         <div className="pt-12 border-t border-neutral-200 mt-12">
-          <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider block mb-4">
+          <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider block mb-4">
             Related Non-Profit Solutions
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -335,7 +335,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                     <span>{rel.title}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-neutral-400 group-hover:text-emerald-600" />
                   </div>
-                  <p className="text-[11px] text-neutral-500 mt-1 line-clamp-1">{rel.shortDescription}</p>
+                  <p className="text-xs text-neutral-500 mt-1 line-clamp-1">{rel.shortDescription}</p>
                 </button>
               );
             })}

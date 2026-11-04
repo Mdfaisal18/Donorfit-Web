@@ -28,7 +28,7 @@ export default function BlogIndexPage() {
   });
 
   return (
-    <div className="space-y-16 sm:space-y-20 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* Hero */}
       <section className="pt-12 sm:pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -115,7 +115,7 @@ export default function BlogIndexPage() {
                 <div className="pt-4 border-t border-neutral-100 flex items-center justify-between">
                   <div className="text-xs">
                     <span className="font-medium text-neutral-900 block">{post.author.name}</span>
-                    <span className="text-[11px] text-neutral-400">{post.author.role}</span>
+                    <span className="text-xs text-neutral-500">{post.author.role}</span>
                   </div>
                   <span className="text-xs font-semibold text-emerald-700 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                     <span>Read Article</span>

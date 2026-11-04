@@ -63,7 +63,7 @@ export default function SolutionPage({ slug }: SolutionPageProps) {
   const audienceImage = getSolutionImage();
 
   return (
-    <div className="space-y-24 sm:space-y-36 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* 1. HERO SECTION WITH RICH ASYMMETRIC PHOTOGRAPHY */}
       <section className="pt-12 sm:pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -86,7 +86,7 @@ export default function SolutionPage({ slug }: SolutionPageProps) {
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
                 onClick={() => openGetStarted(solution.id)}
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-emerald-700/20 transition-all cursor-pointer"
+                className="btn-gradient inline-flex items-center gap-2 px-7 py-3.5 font-bold text-xs sm:text-sm rounded-xl cursor-pointer"
               >
                 <span>Get Started {solution.targetAudience}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -120,7 +120,7 @@ export default function SolutionPage({ slug }: SolutionPageProps) {
       </section>
 
       {/* 2. OVERVIEW & METRICS BANNER */}
-      <section className="bg-neutral-950 text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8 border border-neutral-800 shadow-2xl">
+      <section className="bg-neutral-950 bg-dark-glow text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8 border border-neutral-800 shadow-2xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="max-w-3xl space-y-4">
             <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
@@ -134,7 +134,7 @@ export default function SolutionPage({ slug }: SolutionPageProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-neutral-800">
             {solution.measurableOutcomes.map((m, idx) => (
               <div key={idx} className="p-6 rounded-2xl bg-neutral-900/80 border border-neutral-800 space-y-1">
-                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono tabular-nums">{m.metric}</div>
+                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-400 tabular-nums tabular-nums">{m.metric}</div>
                 <div className="text-sm font-bold text-white">{m.label}</div>
                 <div className="text-xs text-neutral-400 mt-1">{m.context}</div>
               </div>
@@ -157,8 +157,8 @@ export default function SolutionPage({ slug }: SolutionPageProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {solution.keyChallenges.map((c, i) => (
-              <div key={i} className="p-8 rounded-3xl bg-white border border-neutral-200/90 shadow-xs space-y-3">
-                <div className="text-xs font-mono font-bold text-rose-600">Challenge 0{i + 1}</div>
+              <div key={i} className="hover-lift p-8 rounded-3xl bg-white border border-neutral-200/90 shadow-xs space-y-3">
+                <div className="text-xs tabular-nums font-bold text-rose-600">Challenge 0{i + 1}</div>
                 <h3 className="text-lg font-bold text-neutral-900 font-display">{c.title}</h3>
                 <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">{c.description}</p>
               </div>

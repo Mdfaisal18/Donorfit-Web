@@ -159,7 +159,7 @@ export default function CookieConsent() {
               <div className="p-3.5 rounded-xl border border-neutral-200 bg-neutral-50/60 space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-neutral-900">Strictly Necessary Cookies</span>
-                  <span className="px-2 py-0.5 bg-neutral-200 text-neutral-700 rounded text-[10px] font-semibold">Always Active</span>
+                  <span className="px-2 py-0.5 bg-neutral-200 text-neutral-700 rounded text-[11px] font-semibold">Always Active</span>
                 </div>
                 <p className="text-neutral-500 leading-relaxed">
                   Required for core platform security, session tokens, load balancing, and CSRF protection. Cannot be disabled.

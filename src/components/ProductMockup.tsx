@@ -19,6 +19,7 @@ import {
   Award,
   Clock
 } from 'lucide-react';
+import BrandLogo from './BrandLogo.tsx';
 
 interface MockupProps {
   type: 'sponsorship' | 'orphan' | 'moneypool' | 'membership' | 'donations' | 'recurring' | 'donormanagement' | 'campaign' | 'reporting' | 'hero';
@@ -41,7 +42,8 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
               <span className="w-2.5 h-2.5 rounded-full bg-neutral-700"></span>
               <span className="w-2.5 h-2.5 rounded-full bg-neutral-700"></span>
             </div>
-            <span className="text-xs font-mono text-neutral-400 pl-2">app.donorfit.com/workspace/eu-central</span>
+            <span className="pl-2 inline-flex"><BrandLogo variant="icon" onDark className="h-4" alt="Donorfit" /></span>
+            <span className="text-xs tabular-nums text-neutral-400 truncate">app.donorfit.com/workspace/eu-central</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
             <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium text-[11px] flex items-center gap-1">
@@ -59,7 +61,7 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
                 <span>Recurring Monthly Run Rate</span>
                 <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
               </div>
-              <div className="text-2xl font-extrabold text-neutral-950 font-mono tracking-tight mt-1 tabular-nums">
+              <div className="text-2xl font-extrabold text-neutral-950 tabular-nums tracking-tight mt-1 tabular-nums">
                 €248,500
               </div>
               <div className="text-[11px] text-emerald-700 font-semibold mt-1">
@@ -72,7 +74,7 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
                 <span>Active Sponsorships</span>
                 <Users className="w-3.5 h-3.5 text-blue-600" />
               </div>
-              <div className="text-2xl font-extrabold text-neutral-950 font-mono tracking-tight mt-1 tabular-nums">
+              <div className="text-2xl font-extrabold text-neutral-950 tabular-nums tracking-tight mt-1 tabular-nums">
                 3,842
               </div>
               <div className="text-[11px] text-blue-700 font-semibold mt-1">
@@ -85,7 +87,7 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
                 <span>Auto-Tax Compliance</span>
                 <ShieldCheck className="w-3.5 h-3.5 text-purple-600" />
               </div>
-              <div className="text-2xl font-extrabold text-neutral-950 font-mono tracking-tight mt-1 tabular-nums">
+              <div className="text-2xl font-extrabold text-neutral-950 tabular-nums tracking-tight mt-1 tabular-nums">
                 100%
               </div>
               <div className="text-[11px] text-purple-700 font-semibold mt-1">
@@ -101,7 +103,7 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
                 <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
                 <span className="font-semibold text-neutral-200">Real-Time Giving Velocity (30 Days)</span>
               </div>
-              <span className="text-[11px] font-mono text-emerald-400 font-medium">Reconciled via SEPA CAMT.053</span>
+              <span className="text-[11px] tabular-nums text-emerald-400 font-medium">Reconciled via SEPA CAMT.053</span>
             </div>
 
             {/* SVG Sparkline visualization */}
@@ -148,7 +150,7 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
               </div>
             </div>
             <div className="text-right">
-              <span className="font-mono font-bold text-neutral-950">€96,300</span>
+              <span className="tabular-nums font-bold text-neutral-950">€96,300</span>
               <span className="text-[10px] text-emerald-600 block font-medium">99.4% Clean Pass</span>
             </div>
           </div>
@@ -166,7 +168,7 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
             <CreditCard className="w-4 h-4 text-emerald-400" />
             <span className="text-xs font-bold font-display">Frictionless Giving Checkout</span>
           </div>
-          <span className="text-[11px] text-neutral-400 font-mono">2-Step Mobile Optimized</span>
+          <span className="text-[11px] text-neutral-400 tabular-nums">2-Step Mobile Optimized</span>
         </div>
 
         <div className="p-5 sm:p-6 space-y-5 text-xs">
@@ -284,7 +286,7 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
           <div className="space-y-1.5">
             <div className="flex justify-between text-neutral-700">
               <span className="font-medium">Academic Year 2026/2027 Care Funding</span>
-              <span className="font-mono font-bold text-emerald-700">€480 / €480 Funded</span>
+              <span className="tabular-nums font-bold text-emerald-700">€480 / €480 Funded</span>
             </div>
             <div className="w-full h-2 bg-neutral-100 rounded-full overflow-hidden">
               <div className="h-full bg-emerald-600 rounded-full w-full"></div>
@@ -343,7 +345,7 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
           <div className="space-y-1.5">
             <div className="flex justify-between">
               <span className="text-neutral-500">Collected from 142 contributors</span>
-              <span className="font-mono font-bold text-neutral-900">€22,150 / €25,000</span>
+              <span className="tabular-nums font-bold text-neutral-900">€22,150 / €25,000</span>
             </div>
             <div className="w-full h-3 bg-neutral-100 rounded-full overflow-hidden p-0.5">
               <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full w-[88%]"></div>
@@ -353,7 +355,7 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
           <div className="p-3.5 rounded-xl bg-neutral-50 border border-neutral-200 space-y-2">
             <div className="flex justify-between items-center">
               <span className="font-semibold text-neutral-900">Recent Group Contributor</span>
-              <span className="font-mono font-bold text-emerald-700">€500.00</span>
+              <span className="tabular-nums font-bold text-emerald-700">€500.00</span>
             </div>
             <p className="text-neutral-600 italic text-[11px]">
               &ldquo;From the students of Albertus-Magnus Gymnasium. We stand with you!&rdquo;
@@ -374,19 +376,19 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
     <div className={`rounded-2xl border border-neutral-200 bg-white shadow-xl shadow-neutral-900/5 overflow-hidden ${className}`}>
       <div className="flex items-center justify-between px-5 py-3.5 bg-neutral-900 text-white">
         <span className="text-xs font-bold font-display">Donor CRM & Cohort Retention Feed</span>
-        <span className="text-[11px] text-emerald-400 font-mono">Live Data Sync</span>
+        <span className="text-[11px] text-emerald-400 tabular-nums">Live Data Sync</span>
       </div>
 
       <div className="p-5 sm:p-6 space-y-4 text-xs">
         <div className="grid grid-cols-2 gap-3">
           <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200">
             <span className="text-neutral-500 text-[11px] block">Average Donor LTV</span>
-            <span className="text-lg font-bold text-neutral-950 font-mono mt-0.5 block">€1,420</span>
+            <span className="text-lg font-bold text-neutral-950 tabular-nums mt-0.5 block">€1,420</span>
             <span className="text-emerald-600 text-[10px] font-semibold">+22% vs. one-time gifts</span>
           </div>
           <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200">
             <span className="text-neutral-500 text-[11px] block">Failed SEPA Recovery</span>
-            <span className="text-lg font-bold text-neutral-950 font-mono mt-0.5 block">68.4%</span>
+            <span className="text-lg font-bold text-neutral-950 tabular-nums mt-0.5 block">68.4%</span>
             <span className="text-neutral-500 text-[10px]">Via automated retry logic</span>
           </div>
         </div>
@@ -398,7 +400,7 @@ export default function ProductMockup({ type, className = '' }: MockupProps) {
           <div className="space-y-1.5 text-neutral-600">
             <div className="flex items-center justify-between text-[11px]">
               <span className="font-semibold text-neutral-900">Dr. Helena Richter</span>
-              <span className="font-mono text-emerald-700 font-bold">€1,200 Major Gift</span>
+              <span className="tabular-nums text-emerald-700 font-bold">€1,200 Major Gift</span>
             </div>
             <p className="text-[10px] text-neutral-400">Tagged: Clean Water Endowment · Tax certificate #DE-8810 sent</p>
           </div>

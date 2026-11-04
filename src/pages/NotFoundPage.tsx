@@ -1,18 +1,19 @@
 import React from 'react';
 import { useModal } from '../context/ModalContext.tsx';
-import { Compass, ArrowRight, Home, Search } from 'lucide-react';
+import { ArrowRight, Home, Search } from 'lucide-react';
+import BrandLogo from '../components/BrandLogo.tsx';
 
 export default function NotFoundPage() {
   const { navigateTo } = useModal();
 
   return (
     <div className="py-24 sm:py-32 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-      <div className="w-16 h-16 mx-auto rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100">
-        <Compass className="w-8 h-8" />
+      <div className="flex justify-center">
+        <BrandLogo className="h-10 sm:h-12" alt="Donorfit" />
       </div>
 
       <div className="space-y-3">
-        <span className="text-xs font-mono font-bold text-neutral-400 uppercase tracking-widest">Error 404</span>
+        <span className="text-xs tabular-nums font-bold text-neutral-500 uppercase tracking-widest">Error 404</span>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-neutral-950 font-display">
           Page Not Found
         </h1>

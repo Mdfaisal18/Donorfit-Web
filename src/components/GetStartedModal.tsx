@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useModal } from '../context/ModalContext.tsx';
 import { X, CheckCircle2, Sparkles, ArrowRight, Check } from 'lucide-react';
+import BrandLogo from './BrandLogo.tsx';
 
 export default function GetStartedModal() {
   const { isGetStartedOpen, closeGetStarted, selectedModule } = useModal();
@@ -60,11 +61,14 @@ export default function GetStartedModal() {
         aria-labelledby="get-started-headline"
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-neutral-50/70">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Nonprofit Onboarding</span>
-            <h2 id="get-started-headline" className="text-lg font-bold text-neutral-950 font-display">
-              Get Started with Donorfit
-            </h2>
+          <div className="flex items-center gap-3">
+            <BrandLogo variant="icon" className="h-10 shrink-0" alt="" />
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Nonprofit Onboarding</span>
+              <h2 id="get-started-headline" className="text-lg font-bold text-neutral-950 font-display">
+                Get Started with Donorfit
+              </h2>
+            </div>
           </div>
           <button
             onClick={resetAndClose}

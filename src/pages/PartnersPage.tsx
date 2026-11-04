@@ -24,7 +24,7 @@ export default function PartnersPage() {
   ];
 
   return (
-    <div className="space-y-16 sm:space-y-24 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* Hero */}
       <section className="pt-12 sm:pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,7 +58,7 @@ export default function PartnersPage() {
               </div>
 
               <div className="pt-4 border-t border-neutral-100 space-y-2">
-                <span className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider block">Partner Perks:</span>
+                <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider block">Partner Perks:</span>
                 <ul className="space-y-1.5 text-xs text-neutral-700">
                   {pt.benefits.map((b, i) => (
                     <li key={i} className="flex items-center gap-2">
@@ -74,7 +74,7 @@ export default function PartnersPage() {
       </section>
 
       {/* Verified Ecosystem Integrations */}
-      <section className="bg-neutral-900 text-white py-16 rounded-3xl mx-4 sm:mx-6 lg:mx-8">
+      <section id="integrations" className="scroll-mt-24 bg-neutral-900 bg-dark-glow text-white py-16 rounded-3xl mx-4 sm:mx-6 lg:mx-8">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider block">
             Verified Ecosystem Integrations

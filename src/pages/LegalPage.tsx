@@ -11,7 +11,7 @@ export default function LegalPage({ type }: LegalPageProps) {
 
   if (type === 'privacy') {
     return (
-      <div className="py-12 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="py-12 sm:py-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <button
           onClick={() => navigateTo('/')}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-600 hover:text-neutral-900 cursor-pointer"
@@ -44,7 +44,7 @@ export default function LegalPage({ type }: LegalPageProps) {
             <p>
               The controller within the meaning of Article 4(7) GDPR is:
             </p>
-            <div className="p-4 bg-neutral-100 rounded-xl font-mono text-xs text-neutral-800 space-y-1">
+            <div className="p-4 bg-neutral-100 rounded-xl tabular-nums text-xs text-neutral-800 space-y-1">
               <div>Donorfit Technologies GmbH (i.G.)</div>
               <div>Bockenheimer Landstraße 101</div>
               <div>60325 Frankfurt am Main, Germany</div>
@@ -88,7 +88,7 @@ export default function LegalPage({ type }: LegalPageProps) {
 
   if (type === 'cookies') {
     return (
-      <div className="py-12 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="py-12 sm:py-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <button
           onClick={() => navigateTo('/')}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-600 hover:text-neutral-900 cursor-pointer"
@@ -159,7 +159,7 @@ export default function LegalPage({ type }: LegalPageProps) {
 
   if (type === 'impressum') {
     return (
-      <div className="py-12 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="py-12 sm:py-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <button
           onClick={() => navigateTo('/')}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-600 hover:text-neutral-900 cursor-pointer"
@@ -179,7 +179,7 @@ export default function LegalPage({ type }: LegalPageProps) {
         <div className="space-y-6 text-xs sm:text-sm text-neutral-700 leading-relaxed">
           <section className="space-y-2">
             <h2 className="text-base font-bold text-neutral-900 font-display">Service Provider</h2>
-            <div className="p-5 bg-white rounded-2xl border border-neutral-200 font-mono text-xs space-y-1">
+            <div className="p-5 bg-white rounded-2xl border border-neutral-200 tabular-nums text-xs space-y-1">
               <div className="font-bold text-neutral-900">Donorfit Technologies GmbH (i.G.)</div>
               <div>Bockenheimer Landstraße 101</div>
               <div>60325 Frankfurt am Main</div>
@@ -223,7 +223,7 @@ export default function LegalPage({ type }: LegalPageProps) {
 
   if (type === 'terms') {
     return (
-      <div className="py-12 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="py-12 sm:py-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <button
           onClick={() => navigateTo('/')}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-600 hover:text-neutral-900 cursor-pointer"
@@ -275,7 +275,7 @@ export default function LegalPage({ type }: LegalPageProps) {
 
   // Accessibility
   return (
-    <div className="py-12 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="py-12 sm:py-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
       <button
         onClick={() => navigateTo('/')}
         className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-600 hover:text-neutral-900 cursor-pointer"
@@ -315,7 +315,7 @@ export default function LegalPage({ type }: LegalPageProps) {
         <section className="space-y-2">
           <h2 className="text-base font-bold text-neutral-900 font-display">3. Feedback & Contact</h2>
           <p>
-            If you encounter accessibility barriers on any part of our website or donation checkout widgets, please contact our team at <span className="font-mono text-neutral-900">accessibility@donorfit.com</span>. We welcome your input and will remediate issues promptly.
+            If you encounter accessibility barriers on any part of our website or donation checkout widgets, please contact our team at <span className="tabular-nums text-neutral-900">accessibility@donorfit.com</span>. We welcome your input and will remediate issues promptly.
           </p>
         </section>
       </div>

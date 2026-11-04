@@ -24,6 +24,7 @@ import GuidesPage from './pages/GuidesPage.tsx';
 import CaseStudiesPage from './pages/CaseStudiesPage.tsx';
 import FAQsPage from './pages/FAQsPage.tsx';
 import PartnersPage from './pages/PartnersPage.tsx';
+import PricingPage from './pages/PricingPage.tsx';
 import LegalPage from './pages/LegalPage.tsx';
 import NotFoundPage from './pages/NotFoundPage.tsx';
 
@@ -60,6 +61,7 @@ function AppContent() {
     if (currentRoute === '/contact') return <ContactPage />;
     if (currentRoute === '/security') return <SecurityPage />;
     if (currentRoute === '/partners') return <PartnersPage />;
+    if (currentRoute === '/pricing') return <PricingPage />;
 
     // 5. Resources & Knowledge Base
     if (currentRoute === '/blog') return <BlogIndexPage />;
@@ -96,7 +98,11 @@ function AppContent() {
 
       <Navbar />
 
-      <main id="main-content" className="flex-1 focus:outline-hidden">
+      <main id="main-content" className="relative isolate flex-1 focus:outline-hidden">
+        {/* Soft logo-coloured wash behind every page header (homepage hero has its own). */}
+        {currentRoute !== "/" && (
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[620px] bg-hero-glow" />
+        )}
         {renderCurrentPage()}
       </main>
 

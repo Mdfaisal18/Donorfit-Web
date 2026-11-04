@@ -16,7 +16,7 @@ export default function GuidesPage() {
   };
 
   return (
-    <div className="space-y-16 sm:space-y-24 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* Hero */}
       <section className="pt-12 sm:pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,7 +49,7 @@ export default function GuidesPage() {
                   <span className="font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100">
                     {guide.category}
                   </span>
-                  <span className="text-neutral-400 font-mono">{guide.format} · {guide.pageCount}</span>
+                  <span className="text-neutral-500 tabular-nums">{guide.format} · {guide.pageCount}</span>
                 </div>
 
                 <h2 className="text-xl sm:text-2xl font-bold text-neutral-950 font-display leading-snug">
@@ -68,7 +68,7 @@ export default function GuidesPage() {
                     {guide.keyTopics.map((topic, i) => (
                       <span
                         key={i}
-                        className="px-2.5 py-1 bg-neutral-50 border border-neutral-200 rounded-md text-[11px] text-neutral-700 font-medium"
+                        className="px-2.5 py-1 bg-neutral-50 border border-neutral-200 rounded-md text-xs text-neutral-700 font-medium"
                       >
                         {topic}
                       </span>
@@ -156,7 +156,7 @@ export default function GuidesPage() {
                 </div>
 
                 <div className="pt-2 flex items-center justify-between text-neutral-500">
-                  <span className="text-[11px]">Instant access · No spam</span>
+                  <span className="text-xs">Instant access · No spam</span>
                   <button
                     type="submit"
                     className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors cursor-pointer"

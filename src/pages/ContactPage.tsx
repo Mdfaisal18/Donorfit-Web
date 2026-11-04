@@ -31,7 +31,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="space-y-20 sm:space-y-28 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* 1. HERO SECTION */}
       <section className="pt-12 sm:pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -212,23 +212,23 @@ export default function ContactPage() {
               <div className="space-y-3 text-xs">
                 <div>
                   <div className="font-bold text-neutral-900">General & Product Inquiries</div>
-                  <div className="text-neutral-600 font-mono text-[11px] mt-0.5">contact@donorfit.com</div>
+                  <div className="text-neutral-600 tabular-nums text-xs mt-0.5">contact@donorfit.com</div>
                 </div>
 
                 <div className="pt-2 border-t border-neutral-200">
                   <div className="font-bold text-neutral-900">Sales & Nonprofit Demos</div>
-                  <div className="text-neutral-600 font-mono text-[11px] mt-0.5">sales@donorfit.com</div>
+                  <div className="text-neutral-600 tabular-nums text-xs mt-0.5">sales@donorfit.com</div>
                 </div>
 
                 <div className="pt-2 border-t border-neutral-200">
                   <div className="font-bold text-neutral-900">Security & GDPR Inquiries</div>
-                  <div className="text-neutral-600 font-mono text-[11px] mt-0.5">security@donorfit.com</div>
+                  <div className="text-neutral-600 tabular-nums text-xs mt-0.5">security@donorfit.com</div>
                 </div>
 
                 <div className="pt-2 border-t border-neutral-200">
                   <div className="font-bold text-neutral-900">Support Direction</div>
                   <div className="text-neutral-600 mt-0.5 leading-relaxed">
-                    Existing organizations can reach their dedicated support desk via the help link in their administrative workspace or by emailing <span className="font-mono">support@donorfit.com</span>.
+                    Existing organizations can reach their dedicated support desk via the help link in their administrative workspace or by emailing <span className="tabular-nums">support@donorfit.com</span>.
                   </div>
                 </div>
               </div>
@@ -245,7 +245,7 @@ export default function ContactPage() {
                 60325 Frankfurt am Main<br />
                 Germany
               </p>
-              <div className="pt-2 flex items-center gap-2 text-[11px] text-neutral-500">
+              <div className="pt-2 flex items-center gap-2 text-xs text-neutral-500">
                 <Clock className="w-3.5 h-3.5 text-neutral-400" />
                 <span>Office Hours: Mon – Fri, 09:00 – 18:00 CET</span>
               </div>

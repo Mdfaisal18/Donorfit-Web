@@ -13,18 +13,19 @@ import {
   Compass,
   Check
 } from 'lucide-react';
+import BrandLogo from '../components/BrandLogo.tsx';
 
 export default function AboutPage() {
   const { openBookDemo, openGetStarted, navigateTo } = useModal();
 
   return (
-    <div className="space-y-24 sm:space-y-36 pb-20">
+    <div className="space-y-24 sm:space-y-32 lg:space-y-36 pb-24">
       
       {/* 1. HERO SECTION WITH SUBTLE PATTERN */}
       <section className="relative pt-12 sm:pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+            <BrandLogo variant="icon" className="h-4" alt="" />
             <span>About Donorfit</span>
           </div>
 
@@ -94,7 +95,7 @@ export default function AboutPage() {
       </section>
 
       {/* 4. GUIDING PRINCIPLES: DARK CONTRAST SECTION */}
-      <section className="bg-neutral-950 text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8 border border-neutral-800 shadow-2xl">
+      <section className="bg-neutral-950 bg-dark-glow text-white py-20 rounded-3xl mx-4 sm:mx-6 lg:mx-8 border border-neutral-800 shadow-2xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="max-w-3xl space-y-3">
             <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">

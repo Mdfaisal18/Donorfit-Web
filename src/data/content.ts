@@ -1415,7 +1415,7 @@ export const FAQS_DATA: FAQItem[] = [
   },
   {
     question: 'How does Donorfit pricing work?',
-    answer: 'Donorfit operates with transparent pricing tailored to nonprofit organization sizes and fundraising volume. We believe charities should keep the vast majority of their funds, avoiding predatory transaction surcharges. Contact our team to book a demo and receive a customized quote.',
+    answer: 'The all-in-one Donorfit fundraising platform is €0 per month, with no platform fee and no transaction fee. Donors can optionally cover payment processing fees so your organization receives the full amount. Specialised add-ons such as CRM, recurring subscriptions, sponsorship, membership, school and Qurbani are purchased separately — see our Pricing page or contact our team for details.',
     category: 'Pricing'
   }
 ];
