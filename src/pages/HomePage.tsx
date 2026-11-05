@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useModal } from '../context/ModalContext.tsx';
 import ProductMockup from '../components/ProductMockup.tsx';
+import RealtimeAppGraphic from '../components/RealtimeAppGraphic.tsx';
 import { 
   ArrowRight, 
   CheckCircle2, 
@@ -34,6 +35,7 @@ export default function HomePage() {
   const { openBookDemo, openGetStarted, navigateTo } = useModal();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [activeShowcase, setActiveShowcase] = useState<ShowcaseTab>('donations');
+  const [heroVisualMode, setHeroVisualMode] = useState<'app' | 'photo'>('app');
   
   // Interactive Non-Profit Savings Estimator
   const [donorCount, setDonorCount] = useState<number>(1500);
@@ -126,58 +128,94 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Hero Visual Composition: Real SaaS Headquarters + Live Analytics Overlay */}
+          {/* Hero Visual Selector & Real-Time Application Graphic */}
           <div className="relative max-w-6xl mx-auto mt-6">
-            <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-neutral-200/90 shadow-2xl bg-neutral-900">
-              {/* Browser Header Bar */}
-              <div className="flex items-center justify-between px-4 py-2.5 bg-neutral-950 text-white border-b border-neutral-800 text-xs">
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1.5">
-                    <span className="w-3 h-3 rounded-full bg-rose-500/80"></span>
-                    <span className="w-3 h-3 rounded-full bg-amber-500/80"></span>
-                    <span className="w-3 h-3 rounded-full bg-emerald-500/80"></span>
-                  </div>
-                  <span className="text-[11px] tabular-nums text-neutral-400 pl-3">donorfit.com/platform/mission-hub</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] text-emerald-400 font-medium">European Hub · Real-Time Sync</span>
-                </div>
-              </div>
-
-              {/* Composition Image */}
-              <div className="relative">
-                <img
-                  src="/src/assets/images/saas_hero_fundraising_platform_1793682092168.jpg"
-                  alt="Modern European nonprofit leadership team analyzing live fundraising analytics display"
-                  className="w-full h-80 sm:h-120 object-cover"
-                  referrerPolicy="no-referrer"
-                />
-                
-                {/* Gradient Scrim for contrast */}
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/20 to-transparent"></div>
-
-                {/* Floating Glassmorphic Metric Cards */}
-                <div className="absolute bottom-4 sm:bottom-6 inset-x-4 sm:inset-x-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                  <div className="p-4 rounded-xl bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 text-white shadow-xl">
-                    <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider block">Predictable Giving</span>
-                    <div className="text-xl sm:text-2xl font-bold tabular-nums mt-1 text-emerald-400">€248,500 / mo</div>
-                    <span className="text-[11px] text-neutral-300 mt-1 block">+18.4% recurring retention</span>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 text-white shadow-xl">
-                    <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider block">Active Beneficiaries</span>
-                    <div className="text-xl sm:text-2xl font-bold tabular-nums mt-1 text-blue-400">3,842 Children</div>
-                    <span className="text-[11px] text-neutral-300 mt-1 block">Supported across 18 missions</span>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 text-white shadow-xl hidden sm:block">
-                    <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider block">Admin Time Returned</span>
-                    <div className="text-xl sm:text-2xl font-bold tabular-nums mt-1 text-purple-400">65% Saved</div>
-                    <span className="text-[11px] text-neutral-300 mt-1 block">Zero manual CSV reconciliation</span>
-                  </div>
-                </div>
+            
+            {/* Visual Mode Pill Switcher */}
+            <div className="flex items-center justify-center mb-5">
+              <div className="inline-flex p-1 bg-white/90 border border-neutral-200/90 rounded-full shadow-xs backdrop-blur-md text-xs font-semibold">
+                <button
+                  type="button"
+                  onClick={() => setHeroVisualMode('app')}
+                  className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-2 ${
+                    heroVisualMode === 'app'
+                      ? 'bg-neutral-900 text-white shadow-sm'
+                      : 'text-neutral-600 hover:text-neutral-900'
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>Real-Time Application Graphic</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setHeroVisualMode('photo')}
+                  className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
+                    heroVisualMode === 'photo'
+                      ? 'bg-neutral-900 text-white shadow-sm'
+                      : 'text-neutral-600 hover:text-neutral-900'
+                  }`}
+                >
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span>Field Impact View</span>
+                </button>
               </div>
             </div>
+
+            {/* Application Graphic or Photo Render */}
+            {heroVisualMode === 'app' ? (
+              <RealtimeAppGraphic />
+            ) : (
+              <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-neutral-200/90 shadow-2xl bg-neutral-900">
+                {/* Browser Header Bar */}
+                <div className="flex items-center justify-between px-4 py-2.5 bg-neutral-950 text-white border-b border-neutral-800 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                      <span className="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                      <span className="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                      <span className="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                    </div>
+                    <span className="text-[11px] tabular-nums text-neutral-400 pl-3">donorfit.com/platform/mission-hub</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-emerald-400 font-medium">European Hub · Real-Time Sync</span>
+                  </div>
+                </div>
+
+                {/* Composition Image */}
+                <div className="relative">
+                  <img
+                    src="/src/assets/images/saas_hero_fundraising_platform_1793682092168.jpg"
+                    alt="Modern European nonprofit leadership team analyzing live fundraising analytics display"
+                    className="w-full h-80 sm:h-120 object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                  
+                  {/* Gradient Scrim for contrast */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/20 to-transparent"></div>
+
+                  {/* Floating Glassmorphic Metric Cards */}
+                  <div className="absolute bottom-4 sm:bottom-6 inset-x-4 sm:inset-x-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                    <div className="p-4 rounded-xl bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 text-white shadow-xl">
+                      <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider block">Predictable Giving</span>
+                      <div className="text-xl sm:text-2xl font-bold tabular-nums mt-1 text-emerald-400">€248,500 / mo</div>
+                      <span className="text-[11px] text-neutral-300 mt-1 block">+18.4% recurring retention</span>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 text-white shadow-xl">
+                      <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider block">Active Beneficiaries</span>
+                      <div className="text-xl sm:text-2xl font-bold tabular-nums mt-1 text-blue-400">3,842 Children</div>
+                      <span className="text-[11px] text-neutral-300 mt-1 block">Supported across 18 missions</span>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 text-white shadow-xl hidden sm:block">
+                      <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider block">Admin Time Returned</span>
+                      <div className="text-xl sm:text-2xl font-bold tabular-nums mt-1 text-purple-400">65% Saved</div>
+                      <span className="text-[11px] text-neutral-300 mt-1 block">Zero manual CSV reconciliation</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

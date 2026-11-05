@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useModal } from '../context/ModalContext.tsx';
 import { PRODUCTS_DATA } from '../data/content.ts';
 import ProductMockup from '../components/ProductMockup.tsx';
+import RealtimeAppGraphic from '../components/RealtimeAppGraphic.tsx';
 import { 
   ArrowRight, 
   CheckCircle2, 
@@ -24,6 +25,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
   const product = PRODUCTS_DATA[slug];
   const { openBookDemo, openGetStarted, navigateTo } = useModal();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [visualMode, setVisualMode] = useState<'app' | 'photo'>('app');
 
   if (!product) {
     return (
@@ -135,24 +137,58 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
       </section>
 
-      {/* 2. CONTEXTUAL STORYTELLING: IMPACT PHOTOGRAPHY STRIP */}
+      {/* 2. LIVE APPLICATION INTERFACE & FIELD IMPACT STRIP */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl overflow-hidden border border-neutral-200 relative shadow-xl">
-          <img
-            src={heroImage.src}
-            alt={heroImage.alt}
-            className="w-full h-72 sm:h-96 object-cover"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/85 via-neutral-950/30 to-transparent flex items-end p-6 sm:p-10">
-            <div className="text-white max-w-2xl space-y-2">
-              <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Mission in Action</span>
-              <h2 className="text-xl sm:text-3xl font-bold font-display text-balance">
-                Connecting generous European donors with verified, tangible impact.
-              </h2>
-            </div>
+        {/* Visual Mode Pill Switcher */}
+        <div className="flex items-center justify-center mb-5">
+          <div className="inline-flex p-1 bg-white/90 border border-neutral-200/90 rounded-full shadow-xs backdrop-blur-md text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => setVisualMode('app')}
+              className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-2 ${
+                visualMode === 'app'
+                  ? 'bg-neutral-900 text-white shadow-sm'
+                  : 'text-neutral-600 hover:text-neutral-900'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Real-Time {product.title} Graphic</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setVisualMode('photo')}
+              className={`px-4 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
+                visualMode === 'photo'
+                  ? 'bg-neutral-900 text-white shadow-sm'
+                  : 'text-neutral-600 hover:text-neutral-900'
+              }`}
+            >
+              <Building2 className="w-3.5 h-3.5" />
+              <span>Field Impact View</span>
+            </button>
           </div>
         </div>
+
+        {visualMode === 'app' ? (
+          <RealtimeAppGraphic productSlug={slug} />
+        ) : (
+          <div className="rounded-3xl overflow-hidden border border-neutral-200 relative shadow-xl">
+            <img
+              src={heroImage.src}
+              alt={heroImage.alt}
+              className="w-full h-72 sm:h-96 object-cover"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/85 via-neutral-950/30 to-transparent flex items-end p-6 sm:p-10">
+              <div className="text-white max-w-2xl space-y-2">
+                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Mission in Action</span>
+                <h2 className="text-xl sm:text-3xl font-bold font-display text-balance">
+                  Connecting generous European donors with verified, tangible impact.
+                </h2>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* 3. PROBLEMS ADDRESSED */}
